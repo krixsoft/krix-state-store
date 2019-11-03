@@ -28,5 +28,21 @@ export class Knex<T> {
   }
 
   setState (stateActions: Interfaces.StateAction|Interfaces.StateAction[]) {
+    const arrOfStateActions = _.isArray(stateActions)
+      ? stateActions : [ stateActions ];
+
+    _.forEach(arrOfStateActions, (stateAction) => {
+      const statePath = _.join(stateAction.state, '.');
+      const oldValue = _.get(this.store, statePath);
+
+      _.set(this.store, statePath, stateAction.value);
+
+      this.sjStoreChanges.next({
+        statePath: statePath,
+        state: stateAction.state,
+        oldValue: oldValue,
+        newValue: stateAction.value,
+      });
+    });
   }
 }
