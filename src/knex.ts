@@ -22,8 +22,9 @@ export class Knex<T> {
     return;
   }
 
-  getState<StateType = any> (state: string[]): StateType {
-    return;
+  getState <StateType = any> (state: string[]): StateType {
+    const statePath = _.join(state, '.');
+    return _.get(this.store, statePath);
   }
 
   setState (stateActions: Interfaces.StateAction|Interfaces.StateAction[]) {
