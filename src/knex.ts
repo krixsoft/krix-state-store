@@ -25,6 +25,45 @@ export class Knex<T> {
 
     
     
+  /**
+   * Returns state watcher - Observable which emits all changes of selected state.
+   *
+   * @param  {string[]} state - parts of state path
+   * @param  {boolean} [onlyChanges=false] - emits only changes (without current state)
+   * @return Rx.Observable<StateType>
+   */
+  select <StateType = any> (
+    state: string[],
+    onlyChanges: boolean = false,
+  ): Rx.Observable<StateType> {
+    const statePath = this.getStatePath(state);
+
+    const obsStateChanges = this.sjStoreChanges
+      .pipe(
+        RxOp.filter((storeChange) => {
+          return storeChange.statePath === statePath;
+        }),
+        RxOp.map((stateChange: Interfaces.StoreChange<StateType>) => {
+          return stateChange.newValue;
+        }),
+        RxOp.takeUntil(this.sjStopSignal),
+      );
+
+    if (onlyChanges) {
+      return obsStateChanges;
+    }
+
+    const value = this.getStateByPath<StateType>(statePath);
+    const obsCurrentState = Rx.of(value);
+
+    return Rx.merge(
+      obsCurrentState,
+      obsStateChanges,
+    )
+      .pipe(
+        RxOp.takeUntil(this.sjStopSignal),
+      );
+  }
 
   /**
    * Returns state by parts of state path.
