@@ -4,6 +4,6 @@ export interface StateAction {
   value: any;
 }
 
-export interface StoreOptions<StoreType> {
+export interface KnexOptions <StoreType> {
   initStore: StoreType;
 }
