@@ -5,7 +5,11 @@ import { Interfaces } from './shared';
 
 export class Knex<T> {
   private store: any;
-  private sjStoreChanges: Rx.BehaviorSubject<any>;
+
+  /**
+   * Subject for handling state changes
+   */
+  private sjStoreChanges: Rx.Subject<Interfaces.StoreChange>;
 
   static create <StoreType> (
     options?: Interfaces.StoreOptions<StoreType>,
