@@ -23,8 +23,19 @@ export class Knex<T> {
     return;
   }
 
-  getState <StateType = any> (state: string[]): StateType {
-    const statePath = _.join(state, '.');
+    
+    
+
+  /**
+   * Returns state by parts of state path.
+   *
+   * @param  {string[]} state - parts of state path
+   * @return StateType
+   */
+  getState <StateType = any> (
+    state: string[],
+  ): StateType {
+    const statePath = this.getStatePath(state);
     return _.get(this.store, statePath);
   }
 
