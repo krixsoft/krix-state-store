@@ -29,6 +29,10 @@ export class Knex<T> {
     return inst;
   }
 
+  constructor () {
+    this.sjStoreChanges = new Rx.Subject();
+    this.sjStopSignal = new Rx.Subject();
+  }
 
   /**
    * Inits Knex.
