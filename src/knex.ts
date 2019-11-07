@@ -23,7 +23,18 @@ export class Knex<T> {
     return;
   }
 
-    
+  /**
+   * Destroys Knex.
+   * - stops all state watchers;
+   * - sets store to empty object;
+   *
+   * @return void
+   */
+  destroy (): void {
+    this.sjStopSignal.next(null);
+    this.store = {};
+  }
+
     
   /**
    * Returns state watcher - Observable which emits all changes of selected state.
