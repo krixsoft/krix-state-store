@@ -17,7 +17,7 @@ class PodiumAction {
   }
 
   setPodiumModalCoords (x: number, y: number) {
-    knexStore.setState([
+    knexStore.setStates([
       {
         state: [ 'podium', 'modalX' ],
         value: x,
