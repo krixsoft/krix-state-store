@@ -28,22 +28,40 @@ export class Knex<T> {
     return _.get(this.store, statePath);
   }
 
-  setState (stateActions: Interfaces.StateAction|Interfaces.StateAction[]) {
-    const arrOfStateActions = _.isArray(stateActions)
-      ? stateActions : [ stateActions ];
 
-    _.forEach(arrOfStateActions, (stateAction) => {
-      const statePath = _.join(stateAction.state, '.');
-      const oldValue = _.get(this.store, statePath);
+  /**
+   * Sets new state using the state action.
+   *
+   * @param  {Interfaces.StateAction} stateAction - action to change state
+   * @return void
+   */
+  setState (
+    stateAction: Interfaces.StateAction,
+  ): void {
+    const statePath = this.getStatePath(stateAction.state);
+    const oldValue = _.get(this.store, statePath);
 
-      _.set(this.store, statePath, stateAction.value);
+    _.set(this.store, statePath, stateAction.value);
 
-      this.sjStoreChanges.next({
-        statePath: statePath,
-        state: stateAction.state,
-        oldValue: oldValue,
-        newValue: stateAction.value,
-      });
+    this.sjStoreChanges.next({
+      statePath: statePath,
+      state: stateAction.state,
+      oldValue: oldValue,
+      newValue: stateAction.value,
+    });
+  }
+
+  /**
+   * Sets new states using state actions.
+   *
+   * @param  {Interfaces.StateAction[]} stateActions - actions to change states
+   * @return void
+   */
+  setStates (
+    stateActions: Interfaces.StateAction[],
+  ): void {
+    _.forEach(stateActions, (stateAction) => {
+      this.setState(stateAction);
     });
   }
 
