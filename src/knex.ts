@@ -28,6 +28,17 @@ export class Knex<T> {
     return _.get(this.store, statePath);
   }
 
+  /**
+   * Returns state by state path.
+   *
+   * @param  {string} statePath - state path
+   * @return StateType
+   */
+  getStateByPath <StateType = any> (
+    statePath: string,
+  ): StateType {
+    return _.get(this.store, statePath);
+  }
 
   /**
    * Sets new state using the state action.
