@@ -11,6 +11,11 @@ export class Knex<T> {
    */
   private sjStoreChanges: Rx.Subject<Interfaces.StoreChange>;
 
+  /**
+   * Subject for stopping state watchers
+   */
+  private sjStopSignal: Rx.Subject<any>;
+
   static create <StoreType> (
     options?: Interfaces.StoreOptions<StoreType>,
   ): Knex<StoreType> {
