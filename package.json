@@ -18,10 +18,12 @@
     "rxjs": "^6.5.3"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.4",
     "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.7",
     "@types/sinon": "^7.5.0",
+    "chai": "^4.2.0",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-mocha": "^7.0.2",
