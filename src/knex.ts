@@ -46,4 +46,21 @@ export class Knex<T> {
       });
     });
   }
+
+  /**
+   * HELPERs
+   */
+
+  /**
+   * Creates state path from parts of state path.
+   *
+   * @param  {string[]} state - parts of state path
+   * @return string - State path
+   */
+  private getStatePath (
+    state: string[],
+  ): string {
+    const statePath = _.join(state, '.');
+    return statePath;
+  }
 }
