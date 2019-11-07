@@ -16,6 +16,11 @@ export class Knex<T> {
    */
   private sjStopSignal: Rx.Subject<any>;
 
+  /**
+   * Initial options
+   */
+  private options: Interfaces.KnexOptions<any>;
+
   static create <StoreType> (
     options?: Interfaces.StoreOptions<StoreType>,
   ): Knex<StoreType> {
