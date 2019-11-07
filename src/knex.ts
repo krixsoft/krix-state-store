@@ -1,4 +1,5 @@
 import * as Rx from 'rxjs';
+import * as RxOp from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Interfaces } from './shared';
 
