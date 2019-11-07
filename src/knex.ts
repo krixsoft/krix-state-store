@@ -29,12 +29,26 @@ export class Knex<T> {
     return inst;
   }
 
-  private init () {
-    this.sjStoreChanges = new Rx.BehaviorSubject(null);
-  }
 
-  select <StateType = any> (state: string[]): StateType {
-    return;
+  /**
+   * Inits Knex.
+   * - sets initial value of store;
+   *
+   * @param  {Interfaces.KnexOptions<StoreType>} [options] - Knex options
+   * @return void
+   */
+  init <StoreType> (
+    options?: Interfaces.KnexOptions<StoreType>,
+  ): void {
+    this.options = options;
+
+    if (!_.isPlainObject(options)) {
+      this.store = {};
+      return;
+    }
+
+    this.store = _.isPlainObject(options.initStore)
+      ? _.cloneDeep(options.initStore) : {};
   }
 
   /**
