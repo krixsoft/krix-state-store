@@ -4,6 +4,9 @@ import * as _ from 'lodash';
 import { Interfaces } from './shared';
 
 export class Knex<T> {
+  /**
+   * Knex store
+   */
   private store: any;
 
   /**
@@ -21,11 +24,18 @@ export class Knex<T> {
    */
   private options: Interfaces.KnexOptions<any>;
 
+  /**
+   * Creates instance of Knex.
+   *
+   * @static
+   * @param  {Interfaces.KnexOptions<StoreType>} [options] - Knex options
+   * @return Knex<StoreType>
+   */
   static create <StoreType> (
-    options?: Interfaces.StoreOptions<StoreType>,
+    options?: Interfaces.KnexOptions<StoreType>,
   ): Knex<StoreType> {
     const inst = new Knex<StoreType>();
-    inst.init();
+    inst.init(options);
     return inst;
   }
 
