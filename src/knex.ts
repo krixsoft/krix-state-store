@@ -63,7 +63,16 @@ export class Knex<T> {
     this.store = {};
   }
 
-    
+  /**
+   * Resets Knex to initial state.
+   *
+   * @return void
+   */
+  reset (): void {
+    this.destroy();
+    this.init(this.options);
+  }
+
   /**
    * Returns state watcher - Observable which emits all changes of selected state.
    *
