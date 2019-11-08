@@ -29,12 +29,11 @@
     "del": "^5.1.0",
     "eslint": "^6.6.0",
     "gulp": "^4.0.2",
+    "gulp-eslint": "^6.0.0",
     "gulp-mocha": "^7.0.2",
-    "gulp-tslint": "^8.1.4",
     "gulp-typescript": "^5.0.1",
     "mocha": "^6.2.2",
     "sinon": "^7.5.0",
-    "tslint": "^5.20.0",
     "typescript": "^3.6.4"
   }
 }
