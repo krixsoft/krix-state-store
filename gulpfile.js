@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const gulp = require(`gulp`);
 const ts = require(`gulp-typescript`);
 const eslint = require(`gulp-eslint`);
@@ -8,10 +9,10 @@ const sourceFolder = `./src`;
 const startFile = `index.js`;
 const distFolder = `./dist`;
 
-gulp.task(`clean:dist`, async function () {
+exports[`clean:dist`] = async function cleanDist () {
   const delResult = await del(`${distFolder}/*`, { force: true });
   return delResult;
-});
+};
 
 /*
  * Start
@@ -20,12 +21,12 @@ gulp.task(`clean:dist`, async function () {
 const spawn = require(`child_process`).spawn;
 let node;
 
-gulp.task(`start:prod`, function (done) {
+exports[`start:prod`] = function startProd (done) {
   node = spawn(`node`, [`${distFolder}/${startFile}`], { stdio: `inherit` });
   done();
-});
+};
 
-gulp.task(`start:dev`, function (done) {
+exports[`start:dev`] = function startDev (done) {
   // eslint-disable-next-line
   if (node) {
     node.kill();
@@ -37,7 +38,8 @@ gulp.task(`start:dev`, function (done) {
     }
   });
   done();
-});
+};
+
 process.on(`exit`, function () {
   // eslint-disable-next-line
   if (node) {
@@ -45,20 +47,21 @@ process.on(`exit`, function () {
   }
 });
 
+
 /**
  * ES Lint
  */
 
-gulp.task(`eslint:prod`, function () {
+exports[`eslint:prod`] = function eslintProd () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
     .pipe(eslint())
     .pipe(eslint.format());
-});
-gulp.task(`eslint:dev`, function () {
+};
+exports[`eslint:dev`] = function eslintDev () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
     .pipe(eslint())
     .pipe(eslint.format());
-});
+};
 
 /**
  * TS Compilator
@@ -66,51 +69,64 @@ gulp.task(`eslint:dev`, function () {
 
 const tsProject = ts.createProject(`./tsconfig.json`);
 
-gulp.task(`build:move-jts`, gulp.series(function () {
+exports[`move-jts`] = function moveJTS () {
   return gulp.src([
     `${sourceFolder}/**/*.js`,
     `${sourceFolder}/**/*.d.ts`,
     `${sourceFolder}/**/*.json`,
   ])
     .pipe(gulp.dest(`${distFolder}`));
-}));
+};
 
-gulp.task(`build`, gulp.series(function () {
+exports[`build:ts`] = function buildTs () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
     .pipe(tsProject())
     .pipe(gulp.dest(`${distFolder}`));
-}, `build:move-jts`));
+};
 
-gulp.task(`build:prod`, gulp.series(`eslint:prod`, `clean:dist`, `build`));
-gulp.task(`build:dev`, gulp.series(`eslint:dev`, `build`));
+exports[`build`] = gulp.series(exports[`build:ts`], exports[`move-jts`]);
 
-gulp.task(`watch`, gulp.series(
-  `clean:dist`,
-  `build:dev`,
-  `start:dev`,
-  function () {
-    return gulp.watch([
-      `${sourceFolder}/**/*.ts`,
-      `${sourceFolder}/**/*.js`,
-      `${sourceFolder}/**/*.json`,
-    ], gulp.series(`build:dev`, `start:dev`));
-  },
-));
+exports[`build:prod`] = gulp.series(
+  exports[`eslint:prod`],
+  exports[`clean:dist`],
+  exports[`build`],
+);
+exports[`build:dev`] = gulp.series(exports[`eslint:dev`], exports[`build`]);
+
+exports[`watch:build:project`] = function watchBuildProject () {
+  return gulp.watch([
+    `${sourceFolder}/**/*.ts`,
+    `${sourceFolder}/**/*.js`,
+    `${sourceFolder}/**/*.json`,
+  ], gulp.series(exports[`build:dev`], exports[`start:dev`]));
+};
+
+exports[`watch`] = gulp.series(
+  exports[`clean:dist`] ,
+  exports[`build:dev`],
+  exports[`start:dev`],
+  exports[`watch:build:project`],
+);
 
 /**
  * Tests
  */
 
-gulp.task(`test`, gulp.series(function () {
+exports[`test`] = function test () {
   return gulp.src(`${distFolder}/**/*.spec.js`)
     .pipe(mocha({ reporter: 'spec', exit: true }))
     .once('error', (error) => {
       console.error(error);
     });
-}));
+};
 
-gulp.task(`watch:test`, gulp.series(`test`, function () {
+exports[`watch:build:test`] = function watchBuildTest () {
   return gulp.watch([
     `${distFolder}/**/*.spec.js`,
-  ], gulp.series(`test`));
-}));
+  ], gulp.series(exports[`test`]));
+};
+
+exports[`watch:test`] = gulp.series(
+  exports[`test`],
+  exports[`watch:build:test`],
+);
