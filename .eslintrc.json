@@ -30,7 +30,8 @@
       "after": true
     }],
     "@typescript-eslint/await-thenable": "warn",
-    "@typescript-eslint/require-await": "warn",
+    "require-await": "off",
+    "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-floating-promises": "warn",
     "@typescript-eslint/no-this-alias": "warn",
     "@typescript-eslint/no-use-before-define": "warn",
