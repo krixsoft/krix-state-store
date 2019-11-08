@@ -23,6 +23,7 @@
     "dist"
   ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "**/*.js"
   ]
 }
