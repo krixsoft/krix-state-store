@@ -46,6 +46,7 @@
     "@typescript-eslint/no-unnecessary-qualifier": "warn",
     "semi": "off",
     "@typescript-eslint/semi": [ "warn" ],
+    "@typescript-eslint/ban-types": "off",
     "no-param-reassign": "warn",
     "function-paren-newline": [ "error", "consistent" ],
     "constructor-super": "warn",
