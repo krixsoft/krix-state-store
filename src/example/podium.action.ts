@@ -1,23 +1,23 @@
-import { knexStore } from './store';
+import { krixStore } from './store';
 
 class PodiumAction {
 
   setVoting (voting: any) {
-    const stateVotingId = knexStore
+    const stateVotingId = krixStore
       .getState([ 'podium', 'votingId' ]);
 
     if (stateVotingId === voting) {
       return;
     }
 
-    knexStore.setState({
+    krixStore.setState({
       state: [ 'podium', 'votingId' ],
       value: voting,
     });
   }
 
   setPodiumModalCoords (x: number, y: number) {
-    knexStore.setStates([
+    krixStore.setStates([
       {
         state: [ 'podium', 'modalX' ],
         value: x,

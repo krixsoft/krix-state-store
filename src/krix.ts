@@ -3,9 +3,9 @@ import * as RxOp from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Interfaces } from './shared';
 
-export class Knex<T> {
+export class Krix<T> {
   /**
-   * Knex store
+   * Krix store
    */
   private store: any;
 
@@ -22,19 +22,19 @@ export class Knex<T> {
   /**
    * Initial options
    */
-  private options: Interfaces.KnexOptions<any>;
+  private options: Interfaces.KrixOptions<any>;
 
   /**
-   * Creates instance of Knex.
+   * Creates instance of Krix.
    *
    * @static
-   * @param  {Interfaces.KnexOptions<StoreType>} [options] - Knex options
-   * @return Knex<StoreType>
+   * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
+   * @return Krix<StoreType>
    */
   static create <StoreType> (
-    options?: Interfaces.KnexOptions<StoreType>,
-  ): Knex<StoreType> {
-    const inst = new Knex<StoreType>();
+    options?: Interfaces.KrixOptions<StoreType>,
+  ): Krix<StoreType> {
+    const inst = new Krix<StoreType>();
     inst.init(options);
     return inst;
   }
@@ -45,14 +45,14 @@ export class Knex<T> {
   }
 
   /**
-   * Inits Knex.
+   * Inits Krix.
    * - sets initial value of store;
    *
-   * @param  {Interfaces.KnexOptions<StoreType>} [options] - Knex options
+   * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
    * @return void
    */
   init <StoreType> (
-    options?: Interfaces.KnexOptions<StoreType>,
+    options?: Interfaces.KrixOptions<StoreType>,
   ): void {
     this.options = options;
 
@@ -66,7 +66,7 @@ export class Knex<T> {
   }
 
   /**
-   * Destroys Knex.
+   * Destroys Krix.
    * - stops all state watchers;
    * - sets store to empty object;
    *
@@ -78,7 +78,7 @@ export class Knex<T> {
   }
 
   /**
-   * Resets Knex to initial state.
+   * Resets Krix to initial state.
    *
    * @return void
    */

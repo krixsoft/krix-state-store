@@ -1,15 +1,15 @@
-import { Knex } from '../knex';
+import { Krix } from '../krix';
 
 import { InitPodiumStore, PodiumStore } from './podium.store';
 
-export interface KnexStore {
+export interface KrixStore {
   podium: PodiumStore;
 }
 
-export const InitKnexStore = {
+export const InitKrixStore = {
   podium: InitPodiumStore,
 };
 
-export const knexStore = Knex.create<KnexStore>({
-  initStore: InitKnexStore,
+export const krixStore = Krix.create<KrixStore>({
+  initStore: InitKrixStore,
 });

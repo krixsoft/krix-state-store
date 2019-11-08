@@ -4,7 +4,7 @@ export interface StateAction {
   value: any;
 }
 
-export interface KnexOptions <StoreType> {
+export interface KrixOptions <StoreType> {
   initStore: StoreType;
 }
 
