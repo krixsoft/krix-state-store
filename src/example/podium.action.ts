@@ -1,8 +1,8 @@
 import { krixStore } from './store';
 
-class PodiumAction {
+export class PodiumAction {
 
-  setVoting (voting: any) {
+  setVoting (voting: any): void {
     const stateVotingId = krixStore
       .getState([ 'podium', 'votingId' ]);
 
@@ -16,7 +16,7 @@ class PodiumAction {
     });
   }
 
-  setPodiumModalCoords (x: number, y: number) {
+  setPodiumModalCoords (x: number, y: number): void {
     krixStore.setStates([
       {
         state: [ 'podium', 'modalX' ],
