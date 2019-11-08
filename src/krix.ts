@@ -1,7 +1,8 @@
 import * as Rx from 'rxjs';
 import * as RxOp from 'rxjs/operators';
-import * as _ from 'lodash';
 import { Interfaces } from './shared';
+
+import { KrixHelper } from './krix.helper';
 
 export class Krix<T> {
   /**
@@ -56,13 +57,13 @@ export class Krix<T> {
   ): void {
     this.options = options;
 
-    if (!_.isPlainObject(options)) {
+    if (!KrixHelper.isObject(options)) {
       this.store = {};
       return;
     }
 
-    this.store = _.isPlainObject(options.initStore)
-      ? _.cloneDeep(options.initStore) : {};
+    this.store = KrixHelper.isObject(options.initStore)
+      ? KrixHelper.cloneDeep(options.initStore) : {};
   }
 
   /**
@@ -137,7 +138,7 @@ export class Krix<T> {
     state: string[],
   ): StateType {
     const statePath = this.getStatePath(state);
-    return _.get(this.store, statePath);
+    return KrixHelper.get(this.store, statePath);
   }
 
   /**
@@ -149,7 +150,7 @@ export class Krix<T> {
   getStateByPath <StateType = any> (
     statePath: string,
   ): StateType {
-    return _.get(this.store, statePath);
+    return KrixHelper.get(this.store, statePath);
   }
 
   /**
@@ -162,9 +163,9 @@ export class Krix<T> {
     stateAction: Interfaces.StateAction,
   ): void {
     const statePath = this.getStatePath(stateAction.state);
-    const oldValue = _.get(this.store, statePath);
+    const oldValue = KrixHelper.get(this.store, statePath);
 
-    _.set(this.store, statePath, stateAction.value);
+    KrixHelper.set(this.store, statePath, stateAction.value);
 
     this.sjStoreChanges.next({
       statePath: statePath,
@@ -183,7 +184,11 @@ export class Krix<T> {
   setStates (
     stateActions: Interfaces.StateAction[],
   ): void {
-    _.forEach(stateActions, (stateAction) => {
+    if (!Array.isArray(stateActions)) {
+      return;
+    }
+
+    stateActions.forEach((stateAction) => {
       this.setState(stateAction);
     });
   }
@@ -201,7 +206,11 @@ export class Krix<T> {
   private getStatePath (
     state: string[],
   ): string {
-    const statePath = _.join(state, '.');
+    if (!Array.isArray(state)) {
+      return ``;
+    }
+
+    const statePath = state.join('.');
     return statePath;
   }
 }
