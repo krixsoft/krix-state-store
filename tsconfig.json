@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
     "baseUrl": "src",
@@ -23,8 +23,10 @@
     "dist"
   ],
   "include": [
+    "*.ts",
+    "*.js",
     "src/**/*.ts",
-    "src/**/*.spec.ts",
-    "**/*.js"
+    "src/**/*.js",
+    "src/**/*.spec.ts"
   ]
 }
