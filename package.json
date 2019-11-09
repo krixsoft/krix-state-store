@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "gulp:tasks": "gulp --gulpfile=./package.gulp.js --tasks", 
+    "gulp:watch": "gulp --gulpfile=./package.gulp.js build:watch", 
+    "gulp:test": "gulp --gulpfile=./package.gulp.js test:watch", 
     "watch": "rimraf ./dist && webpack --w --colors",
     "build": "rimraf ./dist && webpack --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
