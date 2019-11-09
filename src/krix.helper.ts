@@ -39,7 +39,8 @@ export class KrixHelper {
       nextValueInPath = newNextValue;
     }
 
-    return nextValueInPath;
+    return KrixHelper.isUndefined(nextValueInPath)
+      ? defValue : nextValueInPath;
   }
 
   static set <V extends Object> (
