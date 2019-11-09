@@ -14,7 +14,7 @@ export class KrixHelper {
     path: string,
     defValue: any = undefined,
   ): any {
-    if (!KrixHelper.isObject(obj)) {
+    if (!KrixHelper.isObject(obj) || KrixHelper.isNull(obj)) {
       return defValue;
     }
 
