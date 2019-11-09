@@ -44,6 +44,7 @@
     }],
     "@typescript-eslint/consistent-type-definitions": [ "error", "interface" ],
     "@typescript-eslint/no-unnecessary-qualifier": "warn",
+    "@typescript-eslint/consistent-type-assertions": "off",
     "semi": "off",
     "@typescript-eslint/semi": [ "warn" ],
     "@typescript-eslint/ban-types": "off",
@@ -74,7 +75,7 @@
     "no-useless-constructor": "off",
     "max-classes-per-file": [ "warn", 1 ],
     "max-len": [ "warn", {
-      "code": 80,
+      "code": 100,
       "comments": 100
     }],
     "arrow-parens": [ "warn", "always" ],
