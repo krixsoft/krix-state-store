@@ -103,21 +103,29 @@ describe(`KrixHelper`, () => {
           const data = {
             hello: `World`,
           };
-          const dataFromObjWithNumberPath = KrixHelper.get(data, <any>4);
+          const dataFromObjWithNumberPath = KrixHelper
+            .get(data, <any>4);
           expect(dataFromObjWithNumberPath).to.be.undefined;
-          const dataFromObjWithNumberPathWithDef = KrixHelper.get(data, <any>4, defValue);
+          const dataFromObjWithNumberPathWithDef = KrixHelper
+            .get(data, <any>4, defValue);
           expect(dataFromObjWithNumberPathWithDef).to.equal(defValue);
-          const dataFromObjWithObjectPath = KrixHelper.get(data, <any>{});
+          const dataFromObjWithObjectPath = KrixHelper
+            .get(data, <any>{});
           expect(dataFromObjWithObjectPath).to.be.undefined;
-          const dataFromObjWithObjectPathWithDef = KrixHelper.get(data, <any>{}, defValue);
+          const dataFromObjWithObjectPathWithDef = KrixHelper
+            .get(data, <any>{}, defValue);
           expect(dataFromObjWithObjectPathWithDef).to.equal(defValue);
-          const dataFromObjWithUndefinedPath = KrixHelper.get(data, <any>undefined);
+          const dataFromObjWithUndefinedPath = KrixHelper
+            .get(data, <any>undefined);
           expect(dataFromObjWithUndefinedPath).to.be.undefined;
-          const dataFromObjWithUndefinedPathWithDef = KrixHelper.get(data, <any>undefined, defValue);
+          const dataFromObjWithUndefinedPathWithDef = KrixHelper
+            .get(data, <any>undefined, defValue);
           expect(dataFromObjWithUndefinedPathWithDef).to.equal(defValue);
-          const dataFromObjWithNullPath = KrixHelper.get(data, <any>null);
+          const dataFromObjWithNullPath = KrixHelper
+            .get(data, <any>null);
           expect(dataFromObjWithNullPath).to.be.undefined;
-          const dataFromObjWithNullPathWithDef = KrixHelper.get(data, <any>null, defValue);
+          const dataFromObjWithNullPathWithDef = KrixHelper
+            .get(data, <any>null, defValue);
           expect(dataFromObjWithNullPathWithDef).to.equal(defValue);
         });
       });
