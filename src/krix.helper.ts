@@ -85,4 +85,8 @@ export class KrixHelper {
   static isUndefined (value: any): boolean {
     return typeof value === `undefined`;
   }
+
+  static isNull (value: any): boolean {
+    return value === null;
+  }
 }
