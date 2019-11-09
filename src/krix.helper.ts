@@ -1,6 +1,10 @@
 
 export class KrixHelper {
   static cloneDeep <V> (obj: V): V {
+    if (KrixHelper.isUndefined(obj)) {
+      return undefined;
+    }
+
     const clonedObj = JSON.stringify(obj);
     return JSON.parse(clonedObj);
   }
