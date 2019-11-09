@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "declaration": true,
+    "outDir": "./dist",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "target": "es6",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js"
+  ]
+}
