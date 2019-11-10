@@ -205,4 +205,136 @@ describe(`KrixHelper`, () => {
     });
   });
 
+  describe(`set`, () => {
+    const defValue = 256;
+    describe(`when method is invoked with null instead of object`, () => {
+      it('should not set property and return undefined', () => {
+        const data: null = null;
+        const dataFromObj = KrixHelper.set(data, '', defValue);
+        expect(dataFromObj).to.be.undefined;
+      });
+    });
+    describe(`when method is invoked with undefined instead of object`, () => {
+      it('should not set property and return undefined', () => {
+        const data: undefined = undefined;
+        const dataFromObj = KrixHelper.set(data, '', defValue);
+        expect(dataFromObj).to.be.undefined;
+      });
+    });
+    describe(`when method is invoked with string instead of object`, () => {
+      it('should not set property and return undefined', () => {
+        const data: string = 'hello';
+        const dataFromObj = KrixHelper.set(data, '', defValue);
+        expect(dataFromObj).to.be.undefined;
+      });
+    });
+    describe(`when method is invoked with number instead of object`, () => {
+      it('should not set property and return undefined', () => {
+        const data: number = 4;
+        const dataFromObj = KrixHelper.set(data, '', defValue);
+        expect(dataFromObj).to.be.undefined;
+      });
+    });
+
+    describe(`when method is invoked with object`, () => {
+      describe(`and path is not string`, () => {
+        it('should not set property and return undefined', () => {
+          const data = {
+            hello: `World`,
+          };
+          const dataFromObjWithNumberPath = KrixHelper
+            .set(data, <any>4, defValue);
+          expect(dataFromObjWithNumberPath).to.be.undefined;
+          const dataFromObjWithObjectPath = KrixHelper
+            .set(data, <any>{}, defValue);
+          expect(dataFromObjWithObjectPath).to.be.undefined;
+          const dataFromObjWithUndefinedPath = KrixHelper
+            .set(data, <any>undefined, defValue);
+          expect(dataFromObjWithUndefinedPath).to.be.undefined;
+          const dataFromObjWithNullPath = KrixHelper
+            .set(data, <any>null, defValue);
+          expect(dataFromObjWithNullPath).to.be.undefined;
+        });
+      });
+      describe(`and path is empty string`, () => {
+        it('should not set property and return undefined', () => {
+          const data = {
+            hello: `World`,
+          };
+          const dataFromObj = KrixHelper.set(data, '', defValue);
+          expect(dataFromObj).to.be.undefined;
+        });
+      });
+      describe(`and path is a first level property`, () => {
+        describe(`but property doesn't exist`, () => {
+          it('should set property', () => {
+            const data: any = {
+              hello: `World`,
+            };
+            KrixHelper.set(data, 'world', defValue);
+            expect(data.world).to.equal(defValue);
+          });
+        });
+        describe(`and property exists`, () => {
+          it('should set property', () => {
+            const data = {
+              hello: `World`,
+            };
+            KrixHelper.set(data, 'hello', defValue);
+            expect(data.hello).to.equal(defValue);
+          });
+        });
+      });
+      describe(`and path is a second level property`, () => {
+        describe(`and property exists`, () => {
+          it('should set property', () => {
+            const data = {
+              hello: `World`,
+              nestObj: { hello: `World 2` },
+            };
+            KrixHelper.set(data, 'nestObj.hello', defValue);
+            expect(data.nestObj.hello).to.equal(defValue);
+          });
+        });
+        describe(`but property by first part of path doesn't exist`, () => {
+          it('should create first part of path and set property', () => {
+            const data: any = {
+              world: `World`,
+              nestObj: { hello: `World 2` },
+            };
+            KrixHelper.set(data, 'hello.world', defValue);
+            expect(data.hello.world).to.equal(defValue);
+          });
+        });
+      });
+      describe(`and path is a third level property`, () => {
+        describe(`and property exists`, () => {
+          it('should set property', () => {
+            const data = {
+              hello: `World`,
+              nestObj: {
+                nestObj: { hello: `World 3` },
+              },
+            };
+            KrixHelper.set(data, 'nestObj.nestObj.hello', defValue);
+            expect(data.nestObj.nestObj.hello).to.equal(defValue);
+          });
+        });
+        describe(`but property by second part of path doesn't exist`, () => {
+          it('should create second part of path and set property', () => {
+            const data: any = {
+              hello: `World`,
+              nestObj: {
+                nestObj: { hello: `World 3` },
+              },
+            };
+            KrixHelper.set(data, 'nestObj.hello.hello', defValue);
+            expect(data.nestObj.hello.hello).to.equal(defValue);
+          });
+        });
+      });
+    });
+
+  });
+
 });
