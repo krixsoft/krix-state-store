@@ -62,13 +62,13 @@ export class KrixHelper {
     const lastPathPartIndex = pathParts.length - 1;
     for (let pathIndex = 0; pathIndex < lastPathPartIndex; pathIndex++) {
       const pathPart = pathParts[pathIndex];
-      const newNextValue = nextValueInPath[pathPart];
+      const nextValue = nextValueInPath[pathPart];
 
-      if (!KrixHelper.isObject(newNextValue)) {
+      if (!KrixHelper.isObject(nextValue)) {
         nextValueInPath[pathPart] = {};
       }
 
-      nextValueInPath = newNextValue;
+      nextValueInPath = nextValueInPath[pathPart];
     }
 
     const lastPathPart = pathParts[lastPathPartIndex];
