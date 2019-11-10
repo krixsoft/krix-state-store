@@ -5,6 +5,15 @@ import { expect } from 'chai';
 import { Krix } from './krix';
 
 describe(`Krix`, () => {
+  describe(`create`, () => {
+    describe(`when method is invoked`, () => {
+      it('should return instance of Krix', () => {
+        const krixInst = Krix.create();
+        expect(krixInst).to.be.an.instanceOf(Krix);
+      });
+    });
+  });
+
   let krix: Krix<any>;
   beforeEach(() => {
     krix = new Krix();
