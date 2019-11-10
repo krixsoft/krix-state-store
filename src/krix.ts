@@ -55,15 +55,17 @@ export class Krix<T> {
   init <StoreType> (
     options?: Interfaces.KrixOptions<StoreType>,
   ): void {
-    this.options = options;
-
-    if (!KrixHelper.isObject(options)) {
+    if (!KrixHelper.isObject(options)
+        || KrixHelper.isNull(options)
+        || Array.isArray(options)) {
       this.store = {};
+      this.options = {} as Interfaces.KrixOptions<StoreType>;
       return;
     }
+    this.options = { ...options };
 
-    this.store = KrixHelper.isObject(options.initStore)
-      ? KrixHelper.cloneDeep(options.initStore) : {};
+    this.store = KrixHelper.isObject(this.options.initStore)
+      ? KrixHelper.cloneDeep(this.options.initStore) : {};
   }
 
   /**
