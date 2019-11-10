@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 // import * as sinon from 'sinon';
+import * as Rx from 'rxjs';
 
 import { Krix } from './krix';
 
@@ -10,6 +11,16 @@ describe(`Krix`, () => {
       it('should return instance of Krix', () => {
         const krixInst = Krix.create();
         expect(krixInst).to.be.an.instanceOf(Krix);
+      });
+    });
+  });
+
+  describe(`new`, () => {
+    describe(`when instance of class is created`, () => {
+      it('should create "sjStoreChanges" and "sjStopSignal" RxJS Subjects', () => {
+        const krixInst = new Krix();
+        expect(krixInst['sjStoreChanges']).to.be.an.instanceOf(Rx.Subject);
+        expect(krixInst['sjStopSignal']).to.be.an.instanceOf(Rx.Subject);
       });
     });
   });
