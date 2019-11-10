@@ -48,7 +48,7 @@ export class KrixHelper {
     path: string,
     value: any,
   ): void {
-    if (!KrixHelper.isObject(obj)) {
+    if (!KrixHelper.isObject(obj) || KrixHelper.isNull(obj)) {
       return;
     }
 
