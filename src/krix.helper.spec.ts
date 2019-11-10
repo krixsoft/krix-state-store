@@ -471,4 +471,48 @@ describe(`KrixHelper`, () => {
     });
   });
 
+  describe(`isNull`, () => {
+    describe(`when method is invoked with undefined`, () => {
+      it('should return false', () => {
+        const data: any = undefined;
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.false;
+      });
+    });
+    describe(`when method is invoked with string`, () => {
+      it('should return false', () => {
+        const data: any = 'hello';
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.false;
+      });
+    });
+    describe(`when method is invoked with number`, () => {
+      it('should return false', () => {
+        const data: any = 4;
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.false;
+      });
+    });
+    describe(`when method is invoked with null`, () => {
+      it('should return true', () => {
+        const data: any = null;
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.true;
+      });
+    });
+    describe(`when method is invoked with array`, () => {
+      it('should return false', () => {
+        const data: any = [];
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.false;
+      });
+    });
+    describe(`when method is invoked with object`, () => {
+      it('should return false', () => {
+        const data: any = {};
+        const result = KrixHelper.isNull(data);
+        expect(result).to.be.false;
+      });
+    });
+  });
 });
