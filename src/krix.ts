@@ -30,7 +30,7 @@ export class Krix<T> {
    *
    * @static
    * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
-   * @return Krix<StoreType>
+   * @return {Krix<StoreType>}
    */
   static create <StoreType> (
     options?: Interfaces.KrixOptions<StoreType>,
@@ -50,7 +50,7 @@ export class Krix<T> {
    * - sets initial value of store;
    *
    * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
-   * @return void
+   * @return {void}
    */
   init <StoreType> (
     options?: Interfaces.KrixOptions<StoreType>,
@@ -73,7 +73,7 @@ export class Krix<T> {
    * - stops all state watchers;
    * - sets store to empty object;
    *
-   * @return void
+   * @return {void}
    */
   destroy (): void {
     this.sjStopSignal.next(null);
@@ -83,7 +83,7 @@ export class Krix<T> {
   /**
    * Resets Krix to initial state.
    *
-   * @return void
+   * @return {void}
    */
   reset (): void {
     this.destroy();
@@ -105,7 +105,7 @@ export class Krix<T> {
    *
    * @param  {string[]} state - parts of state path
    * @param  {boolean} [onlyChanges=false] - emits only changes (without current state)
-   * @return Rx.Observable<StateType>
+   * @return {Rx.Observable<StateType>}
    */
   select <StateType = any> (
     state: string[],
@@ -144,7 +144,7 @@ export class Krix<T> {
    * Returns state by parts of state path.
    *
    * @param  {string[]} state - parts of state path
-   * @return StateType
+   * @return {StateType}
    */
   getState <StateType = any> (
     state: string[],
@@ -157,7 +157,7 @@ export class Krix<T> {
    * Returns state by state path.
    *
    * @param  {string} statePath - state path
-   * @return StateType
+   * @return {StateType}
    */
   getStateByPath <StateType = any> (
     statePath: string,
@@ -169,7 +169,7 @@ export class Krix<T> {
    * Sets new state using the state action.
    *
    * @param  {Interfaces.StateAction} stateAction - action to change state
-   * @return void
+   * @return {void}
    */
   setState (
     stateAction: Interfaces.StateAction,
@@ -191,7 +191,7 @@ export class Krix<T> {
    * Sets new states using state actions.
    *
    * @param  {Interfaces.StateAction[]} stateActions - actions to change states
-   * @return void
+   * @return {void}
    */
   setStates (
     stateActions: Interfaces.StateAction[],
@@ -213,7 +213,7 @@ export class Krix<T> {
    * Creates state path from parts of state path.
    *
    * @param  {string[]} state - parts of state path
-   * @return string - State path
+   * @return {string} - State path
    */
   private getStatePath (
     state: string[],
