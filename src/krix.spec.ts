@@ -149,6 +149,63 @@ describe(`Krix`, () => {
     });
   });
 
+  describe(`getStateByPath`, () => {
+    const mockStore = {
+      user: {
+        id: 51,
+        fName: `Ivan`,
+        lName: `Ivanov`,
+      },
+    };
+
+    let krix: Krix<any>;
+    beforeEach(() => {
+      krix = Krix.create<any>({
+        initStore: mockStore,
+      });
+    });
+
+    describe(`when method is invoked without state path`, () => {
+      it('should return store', () => {
+        const arg: any = undefined;
+        const result = krix.getStateByPath(arg);
+        expect(result).to.deep.equal(mockStore);
+      });
+    });
+    describe(`when method is invoked with non-string state path`, () => {
+      it('should return store', () => {
+        const args: any[] = [ null, 0, [ `Hello!` ], { hello: `world` } ];
+        args.forEach((arg: any) => {
+          const result = krix.getStateByPath(arg);
+          expect(result).to.deep.equal(mockStore);
+        });
+      });
+    });
+    describe(`when method is invoked with empty state path`, () => {
+      it('should return store', () => {
+        const arg: any = [];
+        const result = krix.getStateByPath(arg);
+        expect(result).to.deep.equal(mockStore);
+      });
+    });
+    describe(`when method is invoked with non-empty state path`, () => {
+      describe(`and state exists in store`, () => {
+        it('should return state', () => {
+          const arg: any = `user.fName`;
+          const result = krix.getStateByPath(arg);
+          expect(result).to.equal(mockStore.user.fName);
+        });
+      });
+      describe(`and state doesn't exist in store`, () => {
+        it('should return undefined', () => {
+          const arg: any = `user.mName`;
+          const result = krix.getStateByPath(arg);
+          expect(result).to.be.undefined;
+        });
+      });
+    });
+  });
+
   describe(`getState`, () => {
     const mockStore = {
       user: {
