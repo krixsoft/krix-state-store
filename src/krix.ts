@@ -91,6 +91,16 @@ export class Krix<T> {
   }
 
   /**
+   * Creates hot observable from `Store Changes` data flow and return it.
+   *
+   * @return {Rx.Observable<Interfaces.StoreChange>}
+   */
+  getStoreChangesObserver (
+  ): Rx.Observable<Interfaces.StoreChange> {
+    return this.sjStoreChanges.asObservable();
+  }
+
+  /**
    * Returns state watcher - Observable which emits all changes of selected state.
    *
    * @param  {string[]} state - parts of state path
