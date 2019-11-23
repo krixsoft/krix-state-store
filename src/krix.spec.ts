@@ -25,12 +25,12 @@ describe(`Krix`, () => {
     });
   });
 
-  let krix: Krix<any>;
-  beforeEach(() => {
-    krix = new Krix();
-  });
-
   describe(`init`, () => {
+    let krix: Krix<any>;
+    beforeEach(() => {
+      krix = new Krix();
+    });
+
     describe(`when method is invoked without options`, () => {
       it('should set "options" property in instance to empty object', () => {
         const options: any = undefined;
@@ -89,6 +89,11 @@ describe(`Krix`, () => {
   });
 
   describe(`getStatePath`, () => {
+    let krix: Krix<any>;
+    beforeEach(() => {
+      krix = new Krix();
+    });
+
     describe(`when method is invoked without state`, () => {
       it('should return empty path', () => {
         const arg: any = undefined;
@@ -139,6 +144,63 @@ describe(`Krix`, () => {
           const arg: any = [ { hello: `world` }, { a: `b` } ];
           const result = krix['getStatePath'](arg);
           expect(result).to.equal(`[object Object].[object Object]`);
+        });
+      });
+    });
+  });
+
+  describe(`getState`, () => {
+    const mockStore = {
+      user: {
+        id: 51,
+        fName: `Ivan`,
+        lName: `Ivanov`,
+      },
+    };
+
+    let krix: Krix<any>;
+    beforeEach(() => {
+      krix = Krix.create<any>({
+        initStore: mockStore,
+      });
+    });
+
+    describe(`when method is invoked without state`, () => {
+      it('should return store', () => {
+        const arg: any = undefined;
+        const result = krix.getState(arg);
+        expect(result).to.deep.equal(mockStore);
+      });
+    });
+    describe(`when method is invoked with non-array state`, () => {
+      it('should return store', () => {
+        const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
+        args.forEach((arg: any) => {
+          const result = krix.getState(arg);
+          expect(result).to.deep.equal(mockStore);
+        });
+      });
+    });
+    describe(`when method is invoked with empty array state`, () => {
+      it('should return store', () => {
+        const arg: any = [];
+        const result = krix.getState(arg);
+        expect(result).to.deep.equal(mockStore);
+      });
+    });
+    describe(`when method is invoked with non-empty array state`, () => {
+      describe(`and state exists in store`, () => {
+        it('should return state', () => {
+          const arg: any = [ `user`, `fName` ];
+          const result = krix.getState(arg);
+          expect(result).to.equal(mockStore.user.fName);
+        });
+      });
+      describe(`and state doesn't exist in store`, () => {
+        it('should return undefined', () => {
+          const arg: any = [ `user`, `mName` ];
+          const result = krix.getState(arg);
+          expect(result).to.be.undefined;
         });
       });
     });
