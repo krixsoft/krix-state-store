@@ -163,7 +163,7 @@ export class Krix<T> {
   getStateByPath <StateType = any> (
     statePath: string,
   ): StateType {
-    if (statePath === ``) {
+    if (!KrixHelper.isString(statePath) || statePath === ``) {
       return this.store;
     }
 
