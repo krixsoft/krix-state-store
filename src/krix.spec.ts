@@ -87,4 +87,60 @@ describe(`Krix`, () => {
       });
     });
   });
+
+  describe(`getStatePath`, () => {
+    describe(`when method is invoked without state`, () => {
+      it('should return empty path', () => {
+        const arg: any = undefined;
+        const result = krix['getStatePath'](arg);
+        expect(result).to.equal(``);
+      });
+    });
+    describe(`when method is invoked with non-array state`, () => {
+      it('should return empty string', () => {
+        const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
+        args.forEach((arg: any) => {
+          const result = krix['getStatePath'](arg);
+          expect(result).to.equal(``);
+        });
+      });
+    });
+    describe(`when method is invoked with empty array state`, () => {
+      it('should return empty string', () => {
+        const arg: any = [];
+        const result = krix['getStatePath'](arg);
+        expect(result).to.equal(``);
+      });
+    });
+    describe(`when method is invoked with non-empty array state`, () => {
+      describe(`and state has one string values`, () => {
+        it('should return correct non-empty string', () => {
+          const arg: any = [ `hello` ];
+          const result = krix['getStatePath'](arg);
+          expect(result).to.equal(`hello`);
+        });
+      });
+      describe(`and parts of state have string values`, () => {
+        it('should return correct non-empty string', () => {
+          const arg: any = [ `hello`, `world` ];
+          const result = krix['getStatePath'](arg);
+          expect(result).to.equal(`hello.world`);
+        });
+      });
+      describe(`and parts of state have number values`, () => {
+        it('should return correct non-empty string', () => {
+          const arg: any = [ 4, 5 ];
+          const result = krix['getStatePath'](arg);
+          expect(result).to.equal(`4.5`);
+        });
+      });
+      describe(`and parts of state have object values`, () => {
+        it('should return correct non-empty string', () => {
+          const arg: any = [ { hello: `world` }, { a: `b` } ];
+          const result = krix['getStatePath'](arg);
+          expect(result).to.equal(`[object Object].[object Object]`);
+        });
+      });
+    });
+  });
 });
