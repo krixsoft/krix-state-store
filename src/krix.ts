@@ -143,11 +143,11 @@ export class Krix<T> {
   /**
    * Returns state by parts of state path.
    *
-   * @param  {string[]} state - parts of state path
+   * @param  {string[]} [state] - parts of state path
    * @return {StateType}
    */
   getState <StateType = any> (
-    state: string[],
+    state?: string[],
   ): StateType {
     const statePath = this.getStatePath(state);
     const stateValue = this.getStateByPath(statePath);
@@ -157,11 +157,11 @@ export class Krix<T> {
   /**
    * Returns state by state path.
    *
-   * @param  {string} statePath - state path
+   * @param  {string} [statePath] - state path
    * @return {StateType}
    */
   getStateByPath <StateType = any> (
-    statePath: string,
+    statePath?: string,
   ): StateType {
     if (!KrixHelper.isString(statePath) || statePath === ``) {
       return this.store;
