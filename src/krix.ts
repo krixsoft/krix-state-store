@@ -150,7 +150,8 @@ export class Krix<T> {
     state: string[],
   ): StateType {
     const statePath = this.getStatePath(state);
-    return KrixHelper.get(this.store, statePath);
+    const stateValue = this.getStateByPath(statePath);
+    return stateValue;
   }
 
   /**
@@ -162,7 +163,12 @@ export class Krix<T> {
   getStateByPath <StateType = any> (
     statePath: string,
   ): StateType {
-    return KrixHelper.get(this.store, statePath);
+    if (statePath === ``) {
+      return this.store;
+    }
+
+    const stateValue = KrixHelper.get(this.store, statePath);
+    return stateValue;
   }
 
   /**
