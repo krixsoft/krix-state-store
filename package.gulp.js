@@ -12,6 +12,10 @@ exports[`clean:dist`] = async function cleanDist () {
   const delResult = await del(`${distFolder}/*`, { force: true });
   return delResult;
 };
+exports[`clean:test`] = async function cleanTest () {
+  const delResult = await del(`${distFolder}/**/*.spec.js`, { force: true });
+  return delResult;
+};
 
 /**
  * ES Lint
@@ -42,11 +46,13 @@ exports[`move:jts`] = function moveJTS () {
 exports[`build:ts:prod`] = function buildTSProd () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
     .pipe(prodTSConfig())
+    .on('error', () => { /* Ignore compiler errors */})
     .pipe(gulp.dest(`${distFolder}`));
 };
 exports[`build:ts:dev`] = function buildTSDev () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
     .pipe(devTSConfig())
+    .on('error', () => { /* Ignore compiler errors */})
     .pipe(gulp.dest(`${distFolder}`));
 };
 
@@ -66,11 +72,11 @@ exports[`build:prod`] = gulp.series(
 );
 exports[`build:dev`] = gulp.series(
   exports[`eslint`],
+  exports[`clean:test`],
   exports[`build:src:dev`],
 );
 
 exports[`build:watch`] = gulp.series(
-  exports[`clean:dist`] ,
   exports[`build:dev`],
   function buildWatch () {
     return gulp.watch([
