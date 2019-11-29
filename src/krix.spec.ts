@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import * as Rx from 'rxjs';
 
 import { Krix } from './krix';
+import { Interfaces } from './shared';
 
 describe(`Krix`, () => {
   describe(`create`, () => {
@@ -258,6 +259,109 @@ describe(`Krix`, () => {
           const arg: any = [ `user`, `mName` ];
           const result = krix.getState(arg);
           expect(result).to.be.undefined;
+        });
+      });
+    });
+  });
+
+  describe(`setState`, () => {
+    const mockStore = {
+      user: {
+        id: 51,
+        fName: `Ivan`,
+        lName: `Ivanov`,
+      },
+    };
+
+    let krix: Krix<any>;
+    beforeEach(() => {
+      krix = Krix.create<any>({
+        initStore: mockStore,
+      });
+    });
+
+    describe(`when method is invoked without state action`, () => {
+      it('should throw error', () => {
+        const resultError = new Error(`Krix - setState: State action isn't exist`);
+        let methodError: any;
+
+        try {
+          const arg: any = undefined;
+          krix.setState(arg);
+        } catch (error) {
+          methodError = error;
+          expect(error.toString()).to.deep.equal(resultError.toString());
+        }
+
+        expect(methodError).to.not.null;
+        expect(methodError).to.not.undefined;
+      });
+    });
+
+    describe(`when method is invoked with state action`, () => {
+      describe(`but state doesn't have an 'array' type`, () => {
+        it('should throw error', () => {
+          const resultError = new Error(`Krix - setState: State doesn't have an 'array' type`);
+          let methodError: any;
+
+          try {
+            const arg: any = {};
+            krix.setState(arg);
+          } catch (error) {
+            methodError = error;
+            expect(error.toString()).to.deep.equal(resultError.toString());
+          }
+
+          expect(methodError).to.not.null;
+          expect(methodError).to.not.undefined;
+        });
+      });
+      describe(`and state is an empty array`, () => {
+        it('should not update store', () => {
+          const arg: Interfaces.StateAction = {
+            state: [],
+            value: `Hello World!`,
+          };
+
+          krix.setState(arg);
+          const result = krix.getState();
+          expect(result).to.deep.equal(mockStore);
+        });
+      });
+      describe(`and state is a path to non-existing property`, () => {
+        it('should create new property in the store', () => {
+          const arg: Interfaces.StateAction = {
+            state: [ `user`, `mName` ],
+            value: `Dima`,
+          };
+
+          const oldStore = krix.getState();
+          expect(oldStore[arg.state[0]][arg.state[1]])
+            .to.be.undefined;
+
+          krix.setState(arg);
+
+          const newStore = krix.getState();
+          expect(newStore[arg.state[0]][arg.state[1]])
+            .to.equal(arg.value);
+        });
+      });
+      describe(`and state is a path to existing property`, () => {
+        it('should update property in the store', () => {
+          const arg: Interfaces.StateAction = {
+            state: [ `user`, `fName` ],
+            value: `Dima`,
+          };
+
+          const oldStore = krix.getState();
+          expect(oldStore[arg.state[0]][arg.state[1]])
+            .to.equal((<any>mockStore)[arg.state[0]][arg.state[1]]);
+
+          krix.setState(arg);
+
+          const newStore = krix.getState();
+          expect(newStore[arg.state[0]][arg.state[1]])
+            .to.equal(arg.value);
         });
       });
     });
