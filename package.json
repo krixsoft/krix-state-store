@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gulp:tasks": "gulp --gulpfile=./package.gulp.js --tasks", 
-    "gulp:watch": "gulp --gulpfile=./package.gulp.js build:watch", 
-    "gulp:test": "gulp --gulpfile=./package.gulp.js test:watch", 
-    "watch": "rimraf ./dist && webpack --w --colors",
-    "build": "rimraf ./dist && webpack --progress --colors",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gulp:tasks": "gulp --gulpfile=./package.gulp.js --tasks",
+    "gulp:watch": "gulp --gulpfile=./package.gulp.js build:watch",
+    "gulp:test": "gulp --gulpfile=./package.gulp.js test:watch",
+    "webpack:watch": "rimraf ./dist && webpack --w --colors",
+    "webpack:build": "rimraf ./dist && webpack --progress --colors",
+    "dev:watch": "npm run gulp:watch",
+    "dev:test": "npm run gulp:test"
   },
   "keywords": [
     "state-storage",
