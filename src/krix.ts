@@ -180,6 +180,14 @@ export class Krix<T> {
   setState (
     stateAction: Interfaces.StateAction,
   ): void {
+    if (!KrixHelper.isObject(stateAction)) {
+      throw new Error(`Krix - setState: State action isn't exist`);
+    }
+
+    if (!Array.isArray(stateAction.state)) {
+      throw new Error(`Krix - setState: State doesn't have an 'array' type`);
+    }
+
     const statePath = this.getStatePath(stateAction.state);
     const oldValue = KrixHelper.get(this.store, statePath);
 
