@@ -355,7 +355,7 @@ describe(`Krix`, () => {
 
           const oldStore = krix.getState();
           expect(oldStore[arg.state[0]][arg.state[1]])
-            .to.equal((<any>mockStore)[arg.state[0]][arg.state[1]]);
+            .to.equal((mockStore as any)[arg.state[0]][arg.state[1]]);
 
           krix.setState(arg);
 

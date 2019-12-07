@@ -104,28 +104,28 @@ describe(`KrixHelper`, () => {
             hello: `World`,
           };
           const dataFromObjWithNumberPath = KrixHelper
-            .get(data, <any>4);
+            .get(data, 4 as any);
           expect(dataFromObjWithNumberPath).to.be.undefined;
           const dataFromObjWithNumberPathWithDef = KrixHelper
-            .get(data, <any>4, defValue);
+            .get(data, 4 as any, defValue);
           expect(dataFromObjWithNumberPathWithDef).to.equal(defValue);
           const dataFromObjWithObjectPath = KrixHelper
-            .get(data, <any>{});
+            .get(data, {} as any);
           expect(dataFromObjWithObjectPath).to.be.undefined;
           const dataFromObjWithObjectPathWithDef = KrixHelper
-            .get(data, <any>{}, defValue);
+            .get(data, {} as any, defValue);
           expect(dataFromObjWithObjectPathWithDef).to.equal(defValue);
           const dataFromObjWithUndefinedPath = KrixHelper
-            .get(data, <any>undefined);
+            .get(data, undefined as any);
           expect(dataFromObjWithUndefinedPath).to.be.undefined;
           const dataFromObjWithUndefinedPathWithDef = KrixHelper
-            .get(data, <any>undefined, defValue);
+            .get(data, undefined as any, defValue);
           expect(dataFromObjWithUndefinedPathWithDef).to.equal(defValue);
           const dataFromObjWithNullPath = KrixHelper
-            .get(data, <any>null);
+            .get(data, null as any);
           expect(dataFromObjWithNullPath).to.be.undefined;
           const dataFromObjWithNullPathWithDef = KrixHelper
-            .get(data, <any>null, defValue);
+            .get(data, null as any, defValue);
           expect(dataFromObjWithNullPathWithDef).to.equal(defValue);
         });
       });
@@ -243,16 +243,16 @@ describe(`KrixHelper`, () => {
             hello: `World`,
           };
           const dataFromObjWithNumberPath = KrixHelper
-            .set(data, <any>4, defValue);
+            .set(data, 4 as any, defValue);
           expect(dataFromObjWithNumberPath).to.be.undefined;
           const dataFromObjWithObjectPath = KrixHelper
-            .set(data, <any>{}, defValue);
+            .set(data, {} as any, defValue);
           expect(dataFromObjWithObjectPath).to.be.undefined;
           const dataFromObjWithUndefinedPath = KrixHelper
-            .set(data, <any>undefined, defValue);
+            .set(data, undefined as any, defValue);
           expect(dataFromObjWithUndefinedPath).to.be.undefined;
           const dataFromObjWithNullPath = KrixHelper
-            .set(data, <any>null, defValue);
+            .set(data, null as any, defValue);
           expect(dataFromObjWithNullPath).to.be.undefined;
         });
       });
