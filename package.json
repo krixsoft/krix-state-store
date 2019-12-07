@@ -9,7 +9,8 @@
     "lerna:clean": "lerna clean --yes",
     "gulp:tasks": "gulp --tasks",
     "dev:build": "concurrently \"gulp shared:move\" \"gulp lerna:bootstrap\"",
-    "dev:watch": "concurrently \"gulp shared:watch\" \"gulp lerna:watch\""
+    "dev:watch": "lerna run --parallel dev:watch",
+    "dev:test": "lerna run --parallel dev:test"
   },
   "keywords": [
     "krix"
