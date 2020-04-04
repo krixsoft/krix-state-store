@@ -2,7 +2,7 @@
   "name": "@krix/store",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "gulp:clear:dist": "gulp --gulpfile=./common.gulp.js clear:dist",
     "gulp:clear:test": "gulp --gulpfile=./common.gulp.js clear:test",

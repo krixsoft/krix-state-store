@@ -1,13 +1,13 @@
 const TerserPlugin = require('terser-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin;
 const path = require('path');
 
 module.exports = {
   entry: `./src/index.ts`,
   output: {
     path: path.resolve(__dirname, `./dist`),
-    filename: `krix.bundle.js`,
+    filename: `index.js`,
   },
   // target: 'node',
   mode: `production`,
@@ -43,7 +43,6 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        extractComments: false,
         terserOptions: {
           ecma: 6,
         },
