@@ -23,10 +23,12 @@
     "dist"
   ],
   "include": [
-    "*.ts",
-    "*.js",
     "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.spec.ts"
+    "test/**/*.ts",
+    "typings/**/*.ts",
+    // etc
+    
+    // if you are going to parse JS files
+    "src/**/*/.js"
   ]
 }

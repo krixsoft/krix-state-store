@@ -4,15 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gulp:tasks": "gulp --gulpfile=./gulp.dev.js --tasks",
-    "gulp:watch": "gulp --gulpfile=./gulp.dev.js build:watch",
-    "gulp:test": "gulp --gulpfile=./gulp.dev.js test:watch",
-    "gulp:clean:dist": "gulp --gulpfile=./gulp.dev.js clean:dist",
-    "gulp:clean:test": "gulp --gulpfile=./gulp.dev.js clean:test",
-    "prod:watch": "npm run gulp:clean:dist && webpack --config webpack.prod.js --w --colors",
-    "prod:build": "npm run gulp:clean:dist && webpack --config webpack.prod.js --progress --colors",
-    "dev:watch": "npm run gulp:watch",
-    "dev:test": "npm run gulp:test"
+    "gulp:clear:dist": "gulp --gulpfile=./common.gulp.js clear:dist",
+    "gulp:clear:test": "gulp --gulpfile=./common.gulp.js clear:test",
+    "webpack:build": "webpack --config webpack.prod.js --progress --colors",
+    "dev:build": "gulp --gulpfile=./build.gulp.js build",
+    "dev:watch": "gulp --gulpfile=./watch-pkg.gulp.js watch",
+    "dev:test": "gulp --gulpfile=./watch-pkg.gulp.js test:watch",
+    "pkg:tasks": "gulp --gulpfile=./gulp.pkg.js --tasks",
+    "pkg:build": "npm run gulp:clear:dist && npm run webpack:build && gulp --gulpfile=./build.gulp.js build:packageJson"
   },
   "keywords": [
     "krix",
@@ -22,8 +21,35 @@
   ],
   "author": "Andrey Shuleiko",
   "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/lodash": "^4.14.149",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "@types/sinon": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-loader": "^4.0.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint": "^6.0.0",
+    "gulp-mocha": "^7.0.2",
+    "gulp-run": "^1.7.1",
+    "gulp-typescript": "^5.0.1",
+    "del": "^5.1.0",
+    "mocha": "^7.1.1",
+    "rimraf": "^3.0.2",
+    "sinon": "^9.0.1",
+    "terser-webpack-plugin": "^2.3.5",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-bundle-analyzer": "^3.6.1",
+    "webpack-cli": "^3.3.11"
+  },
   "dependencies": {
     "lodash": "^4.17.15",
-    "rxjs": "^6.5.3"
+    "rxjs": "^6.5.5"
   }
 }
