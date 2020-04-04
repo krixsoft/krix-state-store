@@ -14,3 +14,8 @@ export interface StoreChange <StateType = any> {
   oldValue: StateType;
   newValue: StateType;
 }
+
+export interface StateChange <StateType = any> {
+  oldValue: StateType;
+  newValue: StateType;
+}
