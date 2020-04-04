@@ -1,7 +1,12 @@
 
+export interface StateActionOptions {
+  signal?: boolean;
+}
+
 export interface StateAction {
   state: string[];
   value: any;
+  options?: StateActionOptions;
 }
 
 export interface KrixOptions <StoreType> {
