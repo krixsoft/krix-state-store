@@ -36,13 +36,14 @@ module.exports = {
     extensions: [ `.ts`, `.tsx`, `.js` ],
   },
   plugins: [
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   optimization: {
     minimize: true,
     minimizer: [
       new TerserPlugin({
         parallel: true,
+        extractComments: false,
         terserOptions: {
           ecma: 6,
         },
