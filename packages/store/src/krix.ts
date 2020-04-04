@@ -11,6 +11,11 @@ export class Krix<T> {
   private store: any;
 
   /**
+   * Map which stores subjects for states
+   */
+  private stateChangesSubjectMap: Map<string, Rx.Subject<Interfaces.StateChange>>;
+
+  /**
    * Subject for handling state changes
    */
   private sjStoreChanges: Rx.Subject<Interfaces.StoreChange>;
@@ -43,6 +48,7 @@ export class Krix<T> {
   constructor () {
     this.sjStoreChanges = new Rx.Subject();
     this.sjStopSignal = new Rx.Subject();
+    this.stateChangesSubjectMap = new Map();
   }
 
   /**
@@ -66,17 +72,21 @@ export class Krix<T> {
 
     this.store = KrixHelper.isObject(this.options.initStore)
       ? KrixHelper.cloneDeep(this.options.initStore) : {};
+
+    this.stateChangesSubjectMap.clear();
   }
 
   /**
    * Destroys Krix.
    * - stops all state watchers;
-   * - sets store to empty object;
+   * - clears a state changes subject map;
+   * - sets a store to empty object;
    *
    * @return {void}
    */
   destroy (): void {
     this.sjStopSignal.next(null);
+    this.stateChangesSubjectMap.clear();
     this.store = {};
   }
 
@@ -113,12 +123,15 @@ export class Krix<T> {
   ): Rx.Observable<StateType> {
     const statePath = this.getStatePath(state);
 
-    const obsStateChanges = this.sjStoreChanges
+    if (this.stateChangesSubjectMap.has(statePath) === false) {
+      const sjStateChangesNew = new Rx.Subject<Interfaces.StateChange>();
+      this.stateChangesSubjectMap.set(statePath, sjStateChangesNew);
+    }
+    const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
+
+    const obsStateChanges = sjStateChanges
       .pipe(
-        RxOp.filter((storeChange) => {
-          return storeChange.statePath === statePath;
-        }),
-        RxOp.map((stateChange: Interfaces.StoreChange<StateType>) => {
+        RxOp.map((stateChange: Interfaces.StateChange<StateType>) => {
           return stateChange.newValue;
         }),
         RxOp.takeUntil(this.sjStopSignal),
@@ -192,6 +205,14 @@ export class Krix<T> {
     const oldValue = KrixHelper.get(this.store, statePath);
 
     KrixHelper.set(this.store, statePath, stateAction.value);
+
+    if (this.stateChangesSubjectMap.has(statePath) === true) {
+      const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
+      sjStateChanges.next({
+        oldValue: oldValue,
+        newValue: stateAction.value,
+      });
+    }
 
     this.sjStoreChanges.next({
       statePath: statePath,
