@@ -204,7 +204,10 @@ export class Krix<T> {
     const statePath = this.getStatePath(stateAction.state);
     const oldValue = KrixHelper.get(this.store, statePath);
 
-    KrixHelper.set(this.store, statePath, stateAction.value);
+    const stateActionIsSignal = KrixHelper.get(stateAction, 'options.signal', false);
+    if (stateActionIsSignal !== true) {
+      KrixHelper.set(this.store, statePath, stateAction.value);
+    }
 
     if (this.stateChangesSubjectMap.has(statePath) === true) {
       const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
