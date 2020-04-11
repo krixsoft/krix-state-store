@@ -18,6 +18,7 @@ export interface StoreChange <StateType = any> {
   state: string[];
   oldValue: StateType;
   newValue: StateType;
+  options?: StateActionOptions;
 }
 
 export interface StateChange <StateType = any> {

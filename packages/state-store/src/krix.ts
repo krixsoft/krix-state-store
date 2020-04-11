@@ -222,6 +222,7 @@ export class Krix<T> {
       state: stateAction.state,
       oldValue: oldValue,
       newValue: stateAction.value,
+      options: stateAction.options,
     });
   }
 
