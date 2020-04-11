@@ -1,5 +1,5 @@
 {
-  "name": "@krix/store",
+  "name": "@krix/state-store",
   "version": "0.0.0",
   "description": "",
   "main": "./dist/index.js",
