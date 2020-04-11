@@ -2,7 +2,6 @@
   "name": "krix",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "postinstall": "npm run lerna:bootstrap",
     "lerna:bootstrap": "lerna bootstrap",
@@ -13,23 +12,33 @@
     "dev:watch": "npm run dev:build && lerna run --parallel dev:watch",
     "pkg:build": "gulp pkg:linfra:build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geass1000/krix.git"
+  },
   "keywords": [
-    "krix"
+    "krix",
+    "state",
+    "predictable",
+    "state-store"
   ],
   "author": "Andrey Shuleiko",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Geass1000/krix/issues"
+  },
   "devDependencies": {
     "@linfra/arbiter": "^2.1.1-alpha.0",
     "@linfra/core": "^2.0.5-alpha.0",
-    "@types/node": "^13.7.1",
-    "@typescript-eslint/eslint-plugin": "^2.14.0",
-    "@typescript-eslint/parser": "^2.14.0",
+    "@types/node": "^13.11.1",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^6.8.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "gulp": "^4.0.2",
-    "lerna": "^3.18.3",
+    "lerna": "^3.20.2",
     "lodash": "^4.17.15"
   }
 }
