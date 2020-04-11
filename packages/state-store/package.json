@@ -10,7 +10,6 @@
     "dev:build": "gulp --gulpfile=./build.gulp.js build",
     "dev:watch": "gulp --gulpfile=./watch-pkg.gulp.js watch",
     "dev:test": "gulp --gulpfile=./watch-pkg.gulp.js test:watch",
-    "pkg:tasks": "gulp --gulpfile=./gulp.pkg.js --tasks",
     "pkg:build": "npm run gulp:clear:dist && npm run webpack:build && gulp --gulpfile=./build.gulp.js build:packageJson"
   },
   "keywords": [

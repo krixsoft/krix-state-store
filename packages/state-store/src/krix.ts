@@ -54,6 +54,7 @@ export class Krix<T> {
   /**
    * Inits Krix.
    * - sets initial value of store;
+   * - clears a state changes subject map;
    *
    * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
    * @return {void}
@@ -61,9 +62,9 @@ export class Krix<T> {
   init <StoreType> (
     options?: Interfaces.KrixOptions<StoreType>,
   ): void {
-    if (!KrixHelper.isObject(options)
-        || KrixHelper.isNull(options)
-        || Array.isArray(options)) {
+    if (KrixHelper.isObject(options) === false
+        || KrixHelper.isNull(options) === true
+        || Array.isArray(options) === true) {
       this.store = {};
       this.options = {} as Interfaces.KrixOptions<StoreType>;
       return;
@@ -176,7 +177,7 @@ export class Krix<T> {
   getStateByPath <StateType = any> (
     statePath?: string,
   ): StateType {
-    if (!KrixHelper.isString(statePath) || statePath === ``) {
+    if (KrixHelper.isString(statePath) === false || statePath === ``) {
       return this.store;
     }
 
@@ -193,11 +194,11 @@ export class Krix<T> {
   setState (
     stateAction: Interfaces.StateAction,
   ): void {
-    if (!KrixHelper.isObject(stateAction)) {
+    if (KrixHelper.isObject(stateAction) === false) {
       throw new Error(`Krix - setState: State action isn't exist`);
     }
 
-    if (!Array.isArray(stateAction.state)) {
+    if (Array.isArray(stateAction.state) === false) {
       throw new Error(`Krix - setState: State doesn't have an 'array' type`);
     }
 
@@ -235,8 +236,8 @@ export class Krix<T> {
   setStates (
     stateActions: Interfaces.StateAction[],
   ): void {
-    if (!Array.isArray(stateActions)) {
-      return;
+    if (Array.isArray(stateActions) === false) {
+      throw new Error(`Krix - setStates: The input argument must be an array`);
     }
 
     stateActions.forEach((stateAction) => {
@@ -257,7 +258,7 @@ export class Krix<T> {
   private getStatePath (
     state: string[],
   ): string {
-    if (!Array.isArray(state)) {
+    if (Array.isArray(state) === false) {
       return ``;
     }
 
