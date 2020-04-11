@@ -11,29 +11,29 @@ module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
 );
 exports = module.exports;
 
-const sourceFolder = `./src`;
 const distFolder = `./dist`;
 
 /**
- * TS Compilator
+ * Package Prepublish Logic
  */
 
-const devTSConfig = ts.createProject(`./tsconfig.json`);
-
-exports[`build:ts`] = function buildTSTask () {
-  return gulp.src(`${sourceFolder}/**/*.ts`)
-    .pipe(devTSConfig())
-    .on('error', () => { /* Ignore compiler errors */})
+exports[`pkg:update-main`] = function pkgUpdateMainInPackageJSON () {
+  return gulp.src([
+    `./package.json`,
+  ])
+    .pipe(replace(/\.\/dist\/index\.js/g, './index.js'))
     .pipe(gulp.dest(`${distFolder}`));
 };
 
-exports[`build:src`] = gulp.series(
-  exports[`build:ts`],
-  exports[`move:jts`],
+exports[`pkg:copy-metafiles`] = function pkgCopyMetafiles () {
+  return gulp.src([
+    `./LICENSE.md`,
+  ])
+    .pipe(gulp.dest(`${distFolder}`));
+};
+
+exports[`pkg:prepublish`] = gulp.series(
+  exports[`pkg:update-main`],
+  exports[`pkg:copy-metafiles`],
 );
 
-exports[`build`] = gulp.series(
-  exports[`eslint`],
-  exports[`clear:test`],
-  exports[`build:src`],
-);
