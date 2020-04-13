@@ -22,7 +22,11 @@
     "predictable",
     "state-store"
   ],
-  "author": "Andrey Shuleiko",
+  "authors": [
+    "Andrey Shuleiko <geass1000@gmail.com> (https://github.com/Geass1000)",
+    "Artur Huziahmetov <artur7work@gmail.com> (https://github.com/Huziahmetov-Artur)",
+    "Daniil Agaev <kreksalix@gmail.com> (https://github.com/Krelix1)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Geass1000/krix/issues"
