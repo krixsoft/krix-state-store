@@ -4,7 +4,7 @@ import { Interfaces } from './shared';
 
 import { KrixHelper } from './krix.helper';
 
-export class Krix<T> {
+export class StateStore<T> {
   /**
    * Krix store
    */
@@ -39,8 +39,8 @@ export class Krix<T> {
    */
   static create <StoreType> (
     options?: Interfaces.KrixOptions<StoreType>,
-  ): Krix<StoreType> {
-    const inst = new Krix<StoreType>();
+  ): StateStore<StoreType> {
+    const inst = new StateStore<StoreType>();
     inst.init(options);
     return inst;
   }
@@ -195,11 +195,11 @@ export class Krix<T> {
     stateAction: Interfaces.StateAction,
   ): void {
     if (KrixHelper.isObject(stateAction) === false) {
-      throw new Error(`Krix - setState: State action isn't exist`);
+      throw new Error(`StateStore - setState: State action isn't exist`);
     }
 
     if (Array.isArray(stateAction.state) === false) {
-      throw new Error(`Krix - setState: State doesn't have an 'array' type`);
+      throw new Error(`StateStore - setState: State doesn't have an 'array' type`);
     }
 
     const statePath = this.getStatePath(stateAction.state);
@@ -237,7 +237,7 @@ export class Krix<T> {
     stateActions: Interfaces.StateAction[],
   ): void {
     if (Array.isArray(stateActions) === false) {
-      throw new Error(`Krix - setStates: The input argument must be an array`);
+      throw new Error(`StateStore - setStates: The input argument must be an array`);
     }
 
     stateActions.forEach((stateAction) => {

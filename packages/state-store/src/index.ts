@@ -1,3 +1,3 @@
 export * from './shared';
 
-export { Krix } from './krix';
+export { StateStore } from './state.store';

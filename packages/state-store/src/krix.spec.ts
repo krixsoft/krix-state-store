@@ -3,15 +3,15 @@ import { expect } from 'chai';
 // import * as sinon from 'sinon';
 import * as Rx from 'rxjs';
 
-import { Krix } from './krix';
+import { StateStore } from './state.store';
 import { Interfaces } from './shared';
 
-describe(`Krix`, () => {
+describe(`StateStore`, () => {
   describe(`create`, () => {
     describe(`when method is invoked`, () => {
-      it('should return instance of Krix', () => {
-        const krixInst = Krix.create();
-        expect(krixInst).to.be.an.instanceOf(Krix);
+      it('should return instance of StateStore', () => {
+        const krixInst = StateStore.create();
+        expect(krixInst).to.be.an.instanceOf(StateStore);
       });
     });
   });
@@ -19,7 +19,7 @@ describe(`Krix`, () => {
   describe(`new`, () => {
     describe(`when instance of class is created`, () => {
       it('should create "sjStoreChanges" and "sjStopSignal" RxJS Subjects', () => {
-        const krixInst = new Krix();
+        const krixInst = new StateStore();
         expect(krixInst['sjStoreChanges']).to.be.an.instanceOf(Rx.Subject);
         expect(krixInst['sjStopSignal']).to.be.an.instanceOf(Rx.Subject);
       });
@@ -27,30 +27,30 @@ describe(`Krix`, () => {
   });
 
   describe(`init`, () => {
-    let krix: Krix<any>;
+    let stateStore: StateStore<any>;
     beforeEach(() => {
-      krix = new Krix();
+      stateStore = new StateStore();
     });
 
     describe(`when method is invoked without options`, () => {
       it('should set "options" property in instance to empty object', () => {
         const options: any = undefined;
-        krix.init(options);
-        expect(krix[`options`]).to.be.an(`object`);
+        stateStore.init(options);
+        expect(stateStore[`options`]).to.be.an(`object`);
       });
     });
     describe(`when method is invoked with null instead of options`, () => {
       it('should set "options" property in instance to empty object', () => {
         const options: any = null;
-        krix.init(options);
-        expect(krix[`options`]).to.be.an(`object`);
+        stateStore.init(options);
+        expect(stateStore[`options`]).to.be.an(`object`);
       });
     });
     describe(`when method is invoked with array instead of options`, () => {
       it('should set "options" property in instance to empty object', () => {
         const options: any = [];
-        krix.init(options);
-        expect(krix[`options`]).to.be.an(`object`);
+        stateStore.init(options);
+        expect(stateStore[`options`]).to.be.an(`object`);
       });
     });
     describe(`when method is invoked with options`, () => {
@@ -58,17 +58,17 @@ describe(`Krix`, () => {
         const options: any = {
           coolOptions: `option`,
         };
-        krix.init(options);
-        expect(krix[`options`]).to.deep.equal(options);
+        stateStore.init(options);
+        expect(stateStore[`options`]).to.deep.equal(options);
       });
       describe(`and options doesn't have "initStore" property`, () => {
         it('should set "store" property in instance to empty object', () => {
           const options: any = {
             coolOptions: `option`,
           };
-          expect(krix[`store`]).to.be.undefined;
-          krix.init(options);
-          expect(krix[`store`]).to.be.an(`object`);
+          expect(stateStore[`store`]).to.be.undefined;
+          stateStore.init(options);
+          expect(stateStore[`store`]).to.be.an(`object`);
         });
       });
       describe(`and options has "initStore" property`, () => {
@@ -81,24 +81,24 @@ describe(`Krix`, () => {
               },
             },
           };
-          expect(krix[`store`]).to.be.undefined;
-          krix.init(options);
-          expect(krix[`store`].megaStore.hello).to.equal(options.initStore.megaStore.hello);
+          expect(stateStore[`store`]).to.be.undefined;
+          stateStore.init(options);
+          expect(stateStore[`store`].megaStore.hello).to.equal(options.initStore.megaStore.hello);
         });
       });
     });
   });
 
   describe(`getStatePath`, () => {
-    let krix: Krix<any>;
+    let stateStore: StateStore<any>;
     beforeEach(() => {
-      krix = new Krix();
+      stateStore = new StateStore();
     });
 
     describe(`when method is invoked without state`, () => {
       it('should return empty path', () => {
         const arg: any = undefined;
-        const result = krix['getStatePath'](arg);
+        const result = stateStore['getStatePath'](arg);
         expect(result).to.equal(``);
       });
     });
@@ -106,7 +106,7 @@ describe(`Krix`, () => {
       it('should return empty string', () => {
         const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = krix['getStatePath'](arg);
+          const result = stateStore['getStatePath'](arg);
           expect(result).to.equal(``);
         });
       });
@@ -114,7 +114,7 @@ describe(`Krix`, () => {
     describe(`when method is invoked with empty array state`, () => {
       it('should return empty string', () => {
         const arg: any = [];
-        const result = krix['getStatePath'](arg);
+        const result = stateStore['getStatePath'](arg);
         expect(result).to.equal(``);
       });
     });
@@ -122,28 +122,28 @@ describe(`Krix`, () => {
       describe(`and state has one string values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ `hello` ];
-          const result = krix['getStatePath'](arg);
+          const result = stateStore['getStatePath'](arg);
           expect(result).to.equal(`hello`);
         });
       });
       describe(`and parts of state have string values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ `hello`, `world` ];
-          const result = krix['getStatePath'](arg);
+          const result = stateStore['getStatePath'](arg);
           expect(result).to.equal(`hello.world`);
         });
       });
       describe(`and parts of state have number values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ 4, 5 ];
-          const result = krix['getStatePath'](arg);
+          const result = stateStore['getStatePath'](arg);
           expect(result).to.equal(`4.5`);
         });
       });
       describe(`and parts of state have object values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ { hello: `world` }, { a: `b` } ];
-          const result = krix['getStatePath'](arg);
+          const result = stateStore['getStatePath'](arg);
           expect(result).to.equal(`[object Object].[object Object]`);
         });
       });
@@ -159,9 +159,9 @@ describe(`Krix`, () => {
       },
     };
 
-    let krix: Krix<any>;
+    let stateStore: StateStore<any>;
     beforeEach(() => {
-      krix = Krix.create<any>({
+      stateStore = StateStore.create<any>({
         initStore: mockStore,
       });
     });
@@ -169,7 +169,7 @@ describe(`Krix`, () => {
     describe(`when method is invoked without state path`, () => {
       it('should return store', () => {
         const arg: any = undefined;
-        const result = krix.getStateByPath(arg);
+        const result = stateStore.getStateByPath(arg);
         expect(result).to.deep.equal(mockStore);
       });
     });
@@ -177,7 +177,7 @@ describe(`Krix`, () => {
       it('should return store', () => {
         const args: any[] = [ null, 0, [ `Hello!` ], { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = krix.getStateByPath(arg);
+          const result = stateStore.getStateByPath(arg);
           expect(result).to.deep.equal(mockStore);
         });
       });
@@ -185,7 +185,7 @@ describe(`Krix`, () => {
     describe(`when method is invoked with empty state path`, () => {
       it('should return store', () => {
         const arg: any = [];
-        const result = krix.getStateByPath(arg);
+        const result = stateStore.getStateByPath(arg);
         expect(result).to.deep.equal(mockStore);
       });
     });
@@ -193,14 +193,14 @@ describe(`Krix`, () => {
       describe(`and state exists in store`, () => {
         it('should return state', () => {
           const arg: any = `user.fName`;
-          const result = krix.getStateByPath(arg);
+          const result = stateStore.getStateByPath(arg);
           expect(result).to.equal(mockStore.user.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
         it('should return undefined', () => {
           const arg: any = `user.mName`;
-          const result = krix.getStateByPath(arg);
+          const result = stateStore.getStateByPath(arg);
           expect(result).to.be.undefined;
         });
       });
@@ -216,9 +216,9 @@ describe(`Krix`, () => {
       },
     };
 
-    let krix: Krix<any>;
+    let stateStore: StateStore<any>;
     beforeEach(() => {
-      krix = Krix.create<any>({
+      stateStore = StateStore.create<any>({
         initStore: mockStore,
       });
     });
@@ -226,7 +226,7 @@ describe(`Krix`, () => {
     describe(`when method is invoked without state`, () => {
       it('should return store', () => {
         const arg: any = undefined;
-        const result = krix.getState(arg);
+        const result = stateStore.getState(arg);
         expect(result).to.deep.equal(mockStore);
       });
     });
@@ -234,7 +234,7 @@ describe(`Krix`, () => {
       it('should return store', () => {
         const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = krix.getState(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.deep.equal(mockStore);
         });
       });
@@ -242,7 +242,7 @@ describe(`Krix`, () => {
     describe(`when method is invoked with empty array state`, () => {
       it('should return store', () => {
         const arg: any = [];
-        const result = krix.getState(arg);
+        const result = stateStore.getState(arg);
         expect(result).to.deep.equal(mockStore);
       });
     });
@@ -250,14 +250,14 @@ describe(`Krix`, () => {
       describe(`and state exists in store`, () => {
         it('should return state', () => {
           const arg: any = [ `user`, `fName` ];
-          const result = krix.getState(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.equal(mockStore.user.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
         it('should return undefined', () => {
           const arg: any = [ `user`, `mName` ];
-          const result = krix.getState(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.be.undefined;
         });
       });
@@ -273,21 +273,21 @@ describe(`Krix`, () => {
       },
     };
 
-    let krix: Krix<any>;
+    let stateStore: StateStore<any>;
     beforeEach(() => {
-      krix = Krix.create<any>({
+      stateStore = StateStore.create<any>({
         initStore: mockStore,
       });
     });
 
     describe(`when method is invoked without state action`, () => {
       it('should throw error', () => {
-        const resultError = new Error(`Krix - setState: State action isn't exist`);
+        const resultError = new Error(`StateStore - setState: State action isn't exist`);
         let methodError: any;
 
         try {
           const arg: any = undefined;
-          krix.setState(arg);
+          stateStore.setState(arg);
         } catch (error) {
           methodError = error;
           expect(error.toString()).to.deep.equal(resultError.toString());
@@ -301,12 +301,12 @@ describe(`Krix`, () => {
     describe(`when method is invoked with state action`, () => {
       describe(`but state doesn't have an 'array' type`, () => {
         it('should throw error', () => {
-          const resultError = new Error(`Krix - setState: State doesn't have an 'array' type`);
+          const resultError = new Error(`StateStore - setState: State doesn't have an 'array' type`);
           let methodError: any;
 
           try {
             const arg: any = {};
-            krix.setState(arg);
+            stateStore.setState(arg);
           } catch (error) {
             methodError = error;
             expect(error.toString()).to.deep.equal(resultError.toString());
@@ -323,8 +323,8 @@ describe(`Krix`, () => {
             value: `Hello World!`,
           };
 
-          krix.setState(arg);
-          const result = krix.getState();
+          stateStore.setState(arg);
+          const result = stateStore.getState();
           expect(result).to.deep.equal(mockStore);
         });
       });
@@ -335,13 +335,13 @@ describe(`Krix`, () => {
             value: `Dima`,
           };
 
-          const oldStore = krix.getState();
+          const oldStore = stateStore.getState();
           expect(oldStore[arg.state[0]][arg.state[1]])
             .to.be.undefined;
 
-          krix.setState(arg);
+          stateStore.setState(arg);
 
-          const newStore = krix.getState();
+          const newStore = stateStore.getState();
           expect(newStore[arg.state[0]][arg.state[1]])
             .to.equal(arg.value);
         });
@@ -353,13 +353,13 @@ describe(`Krix`, () => {
             value: `Dima`,
           };
 
-          const oldStore = krix.getState();
+          const oldStore = stateStore.getState();
           expect(oldStore[arg.state[0]][arg.state[1]])
             .to.equal((mockStore as any)[arg.state[0]][arg.state[1]]);
 
-          krix.setState(arg);
+          stateStore.setState(arg);
 
-          const newStore = krix.getState();
+          const newStore = stateStore.getState();
           expect(newStore[arg.state[0]][arg.state[1]])
             .to.equal(arg.value);
         });

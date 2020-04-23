@@ -1,4 +1,4 @@
-import { Krix } from '../krix';
+import { StateStore } from '../state.store';
 
 import { InitPodiumStore, PodiumStore } from './podium.store';
 
@@ -10,6 +10,6 @@ export const InitKrixStore = {
   podium: InitPodiumStore,
 };
 
-export const krixStore = Krix.create<KrixStore>({
+export const stateStore = StateStore.create<KrixStore>({
   initStore: InitKrixStore,
 });
