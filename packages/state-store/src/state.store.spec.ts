@@ -26,69 +26,6 @@ describe(`StateStore`, () => {
     });
   });
 
-  describe(`init`, () => {
-    let stateStore: StateStore<any>;
-    beforeEach(() => {
-      stateStore = new StateStore();
-    });
-
-    describe(`when method is invoked without options`, () => {
-      it('should set "options" property in instance to empty object', () => {
-        const options: any = undefined;
-        stateStore.init(options);
-        expect(stateStore[`options`]).to.be.an(`object`);
-      });
-    });
-    describe(`when method is invoked with null instead of options`, () => {
-      it('should set "options" property in instance to empty object', () => {
-        const options: any = null;
-        stateStore.init(options);
-        expect(stateStore[`options`]).to.be.an(`object`);
-      });
-    });
-    describe(`when method is invoked with array instead of options`, () => {
-      it('should set "options" property in instance to empty object', () => {
-        const options: any = [];
-        stateStore.init(options);
-        expect(stateStore[`options`]).to.be.an(`object`);
-      });
-    });
-    describe(`when method is invoked with options`, () => {
-      it('should set "options" property in instance to copy of options', () => {
-        const options: any = {
-          coolOptions: `option`,
-        };
-        stateStore.init(options);
-        expect(stateStore[`options`]).to.deep.equal(options);
-      });
-      describe(`and options doesn't have "initStore" property`, () => {
-        it('should set "store" property in instance to empty object', () => {
-          const options: any = {
-            coolOptions: `option`,
-          };
-          expect(stateStore[`store`]).to.be.undefined;
-          stateStore.init(options);
-          expect(stateStore[`store`]).to.be.an(`object`);
-        });
-      });
-      describe(`and options has "initStore" property`, () => {
-        it('should set "store" property in instance to copy of "initStore" property', () => {
-          const options: any = {
-            coolOptions: `option`,
-            initStore: {
-              'megaStore': {
-                hello: 'World!',
-              },
-            },
-          };
-          expect(stateStore[`store`]).to.be.undefined;
-          stateStore.init(options);
-          expect(stateStore[`store`].megaStore.hello).to.equal(options.initStore.megaStore.hello);
-        });
-      });
-    });
-  });
-
   describe(`getStatePath`, () => {
     let stateStore: StateStore<any>;
     beforeEach(() => {
@@ -152,25 +89,22 @@ describe(`StateStore`, () => {
 
   describe(`getStateByPath`, () => {
     const mockStore = {
-      user: {
         id: 51,
         fName: `Ivan`,
         lName: `Ivanov`,
-      },
     };
 
     let stateStore: StateStore<any>;
     beforeEach(() => {
-      stateStore = StateStore.create<any>({
-        initStore: mockStore,
-      });
+      stateStore = StateStore.create<any>();
+      stateStore.addStore('user', mockStore);
     });
 
     describe(`when method is invoked without state path`, () => {
       it('should return store', () => {
         const arg: any = undefined;
         const result = stateStore.getStateByPath(arg);
-        expect(result).to.deep.equal(mockStore);
+        expect(result).to.deep.equal({ user: mockStore });
       });
     });
     describe(`when method is invoked with non-string state path`, () => {
@@ -178,7 +112,7 @@ describe(`StateStore`, () => {
         const args: any[] = [ null, 0, [ `Hello!` ], { hello: `world` } ];
         args.forEach((arg: any) => {
           const result = stateStore.getStateByPath(arg);
-          expect(result).to.deep.equal(mockStore);
+          expect(result).to.deep.equal({ user: mockStore });
         });
       });
     });
@@ -186,7 +120,7 @@ describe(`StateStore`, () => {
       it('should return store', () => {
         const arg: any = [];
         const result = stateStore.getStateByPath(arg);
-        expect(result).to.deep.equal(mockStore);
+        expect(result).to.deep.equal({ user: mockStore });
       });
     });
     describe(`when method is invoked with non-empty state path`, () => {
@@ -194,7 +128,7 @@ describe(`StateStore`, () => {
         it('should return state', () => {
           const arg: any = `user.fName`;
           const result = stateStore.getStateByPath(arg);
-          expect(result).to.equal(mockStore.user.fName);
+          expect(result).to.equal(mockStore.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
@@ -209,25 +143,22 @@ describe(`StateStore`, () => {
 
   describe(`getState`, () => {
     const mockStore = {
-      user: {
         id: 51,
         fName: `Ivan`,
         lName: `Ivanov`,
-      },
     };
 
     let stateStore: StateStore<any>;
     beforeEach(() => {
-      stateStore = StateStore.create<any>({
-        initStore: mockStore,
-      });
+      stateStore = StateStore.create<any>();
+      stateStore.addStore('user', mockStore);
     });
 
     describe(`when method is invoked without state`, () => {
       it('should return store', () => {
         const arg: any = undefined;
         const result = stateStore.getState(arg);
-        expect(result).to.deep.equal(mockStore);
+        expect(result).to.deep.equal({ user: mockStore });
       });
     });
     describe(`when method is invoked with non-array state`, () => {
@@ -235,7 +166,7 @@ describe(`StateStore`, () => {
         const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
         args.forEach((arg: any) => {
           const result = stateStore.getState(arg);
-          expect(result).to.deep.equal(mockStore);
+          expect(result).to.deep.equal({ user: mockStore });
         });
       });
     });
@@ -243,7 +174,7 @@ describe(`StateStore`, () => {
       it('should return store', () => {
         const arg: any = [];
         const result = stateStore.getState(arg);
-        expect(result).to.deep.equal(mockStore);
+        expect(result).to.deep.equal({ user: mockStore });
       });
     });
     describe(`when method is invoked with non-empty array state`, () => {
@@ -251,7 +182,7 @@ describe(`StateStore`, () => {
         it('should return state', () => {
           const arg: any = [ `user`, `fName` ];
           const result = stateStore.getState(arg);
-          expect(result).to.equal(mockStore.user.fName);
+          expect(result).to.equal(mockStore.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
@@ -266,18 +197,15 @@ describe(`StateStore`, () => {
 
   describe(`setState`, () => {
     const mockStore = {
-      user: {
         id: 51,
         fName: `Ivan`,
         lName: `Ivanov`,
-      },
     };
 
     let stateStore: StateStore<any>;
     beforeEach(() => {
-      stateStore = StateStore.create<any>({
-        initStore: mockStore,
-      });
+      stateStore = StateStore.create<any>();
+      stateStore.addStore('user', mockStore)
     });
 
     describe(`when method is invoked without state action`, () => {
@@ -325,7 +253,7 @@ describe(`StateStore`, () => {
 
           stateStore.setState(arg);
           const result = stateStore.getState();
-          expect(result).to.deep.equal(mockStore);
+          expect(result).to.deep.equal({ user: mockStore });
         });
       });
       describe(`and state is a path to non-existing property`, () => {
@@ -355,7 +283,7 @@ describe(`StateStore`, () => {
 
           const oldStore = stateStore.getState();
           expect(oldStore[arg.state[0]][arg.state[1]])
-            .to.equal((mockStore as any)[arg.state[0]][arg.state[1]]);
+            .to.equal((mockStore as any)[arg.state[1]]);
 
           stateStore.setState(arg);
 
