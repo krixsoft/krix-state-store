@@ -1,6 +1,6 @@
 import * as Rx from 'rxjs';
 import * as RxOp from 'rxjs/operators';
-import { Interfaces } from './shared';
+import { Interfaces, Enums } from './shared';
 
 import { KrixHelper } from './krix.helper';
 
@@ -18,7 +18,7 @@ export class StateStore<StoreType = any> {
   /**
    * Subject for handling state changes
    */
-  private sjStoreChanges: Rx.Subject<Interfaces.StoreChange>;
+  private sjStoreCommands: Rx.Subject<Interfaces.StoreCommand>;
 
   /**
    * Subject for stopping state watchers
@@ -39,7 +39,7 @@ export class StateStore<StoreType = any> {
   }
 
   constructor () {
-    this.sjStoreChanges = new Rx.Subject();
+    this.sjStoreCommands = new Rx.Subject();
     this.sjStopSignal = new Rx.Subject();
     this.stateChangesSubjectMap = new Map();
     this.store = {} as StoreType;
@@ -64,16 +64,21 @@ export class StateStore<StoreType = any> {
 
     const clonedState = KrixHelper.cloneDeep(subStore);
     KrixHelper.set(this.store, subStoreName, clonedState);
+
+    this.sjStoreCommands.next({
+      type: Enums.StoreCommandType.AddSubStore,
+      data: clonedState,
+    });
   }
 
   /**
    * Creates hot observable from `Store Changes` data flow and return it.
    *
-   * @return {Rx.Observable<Interfaces.StoreChange>}
+   * @return {Rx.Observable<Interfaces.SetStateCommand>}
    */
-  getStoreChangesObserver (
-  ): Rx.Observable<Interfaces.StoreChange> {
-    return this.sjStoreChanges.asObservable();
+  getStoreCommandObserver (
+  ): Rx.Observable<Interfaces.StoreCommand> {
+    return this.sjStoreCommands.asObservable();
   }
 
   /**
@@ -183,12 +188,15 @@ export class StateStore<StoreType = any> {
       });
     }
 
-    this.sjStoreChanges.next({
-      statePath: statePath,
-      state: stateAction.state,
-      oldValue: oldValue,
-      newValue: stateAction.value,
-      options: stateAction.options,
+    this.sjStoreCommands.next({
+      type: Enums.StoreCommandType.SetState,
+      data: {
+        statePath: statePath,
+        state: stateAction.state,
+        oldValue: oldValue,
+        newValue: stateAction.value,
+        options: stateAction.options,
+      },
     });
   }
 
