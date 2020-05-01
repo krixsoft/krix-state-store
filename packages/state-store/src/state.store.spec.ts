@@ -20,7 +20,7 @@ describe(`StateStore`, () => {
     describe(`when instance of class is created`, () => {
       it('should create "sjStoreChanges" and "sjStopSignal" RxJS Subjects', () => {
         const krixInst = new StateStore();
-        expect(krixInst['sjStoreChanges']).to.be.an.instanceOf(Rx.Subject);
+        expect(krixInst['sjStoreCommands']).to.be.an.instanceOf(Rx.Subject);
         expect(krixInst['sjStopSignal']).to.be.an.instanceOf(Rx.Subject);
       });
     });
@@ -205,7 +205,7 @@ describe(`StateStore`, () => {
     let stateStore: StateStore<any>;
     beforeEach(() => {
       stateStore = StateStore.create<any>();
-      stateStore.addSubStore('user', mockStore)
+      stateStore.addSubStore('user', mockStore);
     });
 
     describe(`when method is invoked without state action`, () => {
