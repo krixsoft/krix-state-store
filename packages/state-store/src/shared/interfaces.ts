@@ -1,3 +1,4 @@
+import * as Enums from './enums';
 
 export interface StateActionOptions {
   signal?: boolean;
@@ -13,7 +14,12 @@ export interface KrixOptions <StoreType> {
   initStore: StoreType;
 }
 
-export interface StoreChange <StateType = any> {
+export interface StoreCommand <StoreCommandDataType = any> {
+  type: Enums.StoreCommandType;
+  data: StoreCommandDataType;
+}
+
+export interface SetStateCommand <StateType = any> {
   statePath: string;
   state: string[];
   oldValue: StateType;
