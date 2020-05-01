@@ -46,23 +46,24 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Returns state by parts of state path.
+   * Adds store partition to general store
    *
-   * @param  {string[]} [state] - parts of state path
-   * @return {StateType}
+   * @param  {string} subStoreName
+   * @param  {SubStoreType} subStore
+   * @return {void}
    */
-  addStore (
-    statePath: string,
-    state: Object,
+  addSubStore <SubStoreType = any> (
+    subStoreName: string,
+    subStore: SubStoreType,
   ): void {
-    const isPathAlreadyExists = KrixHelper.get(this.store, statePath);
+    const isPathAlreadyExists = KrixHelper.get(this.store, subStoreName);
 
     if(KrixHelper.isUndefined(isPathAlreadyExists) === false) {
       throw new Error(`StateStore - addStore: This store already exists`);
     }
 
-    const clonedState = KrixHelper.cloneDeep(state);
-    KrixHelper.set(this.store, statePath, clonedState);
+    const clonedState = KrixHelper.cloneDeep(subStore);
+    KrixHelper.set(this.store, subStoreName, clonedState);
   }
 
   /**
