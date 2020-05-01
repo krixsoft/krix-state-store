@@ -4,7 +4,7 @@ import { Interfaces } from './shared';
 
 import { KrixHelper } from './krix.helper';
 
-export class StateStore<T> {
+export class StateStore<StoreType = any> {
   /**
    * Krix store
    */
@@ -26,11 +26,6 @@ export class StateStore<T> {
   private sjStopSignal: Rx.Subject<any>;
 
   /**
-   * Initial options
-   */
-  private options: Interfaces.KrixOptions<any>;
-
-  /**
    * Creates instance of Krix.
    *
    * @static
@@ -38,10 +33,8 @@ export class StateStore<T> {
    * @return {Krix<StoreType>}
    */
   static create <StoreType> (
-    options?: Interfaces.KrixOptions<StoreType>,
   ): StateStore<StoreType> {
     const inst = new StateStore<StoreType>();
-    inst.init(options);
     return inst;
   }
 
@@ -49,56 +42,27 @@ export class StateStore<T> {
     this.sjStoreChanges = new Rx.Subject();
     this.sjStopSignal = new Rx.Subject();
     this.stateChangesSubjectMap = new Map();
+    this.store = {} as StoreType;
   }
 
   /**
-   * Inits Krix.
-   * - sets initial value of store;
-   * - clears a state changes subject map;
+   * Returns state by parts of state path.
    *
-   * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
-   * @return {void}
+   * @param  {string[]} [state] - parts of state path
+   * @return {StateType}
    */
-  init <StoreType> (
-    options?: Interfaces.KrixOptions<StoreType>,
+  addStore (
+    statePath: string,
+    state: Object,
   ): void {
-    if (KrixHelper.isObject(options) === false
-        || KrixHelper.isNull(options) === true
-        || Array.isArray(options) === true) {
-      this.store = {};
-      this.options = {} as Interfaces.KrixOptions<StoreType>;
-      return;
+    const isPathAlreadyExists = KrixHelper.get(this.store, statePath);
+
+    if(KrixHelper.isUndefined(isPathAlreadyExists) === false) {
+      throw new Error(`StateStore - addStore: This store already exists`);
     }
-    this.options = { ...options };
 
-    this.store = KrixHelper.isObject(this.options.initStore)
-      ? KrixHelper.cloneDeep(this.options.initStore) : {};
-
-    this.stateChangesSubjectMap.clear();
-  }
-
-  /**
-   * Destroys Krix.
-   * - stops all state watchers;
-   * - clears a state changes subject map;
-   * - sets a store to empty object;
-   *
-   * @return {void}
-   */
-  destroy (): void {
-    this.sjStopSignal.next(null);
-    this.stateChangesSubjectMap.clear();
-    this.store = {};
-  }
-
-  /**
-   * Resets Krix to initial state.
-   *
-   * @return {void}
-   */
-  reset (): void {
-    this.destroy();
-    this.init(this.options);
+    const clonedState = KrixHelper.cloneDeep(state);
+    KrixHelper.set(this.store, statePath, clonedState);
   }
 
   /**
