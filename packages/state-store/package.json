@@ -3,6 +3,13 @@
   "version": "4.0.0-alpha.0",
   "description": "Predictable State Store",
   "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krixsoft/krix"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "gulp:clear:dist": "gulp --gulpfile=./common.gulp.js clear:dist",
     "gulp:clear:test": "gulp --gulpfile=./common.gulp.js clear:test",
