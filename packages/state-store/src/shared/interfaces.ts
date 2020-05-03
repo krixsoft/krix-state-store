@@ -19,6 +19,11 @@ export interface StoreCommand <StoreCommandDataType = any> {
   data: StoreCommandDataType;
 }
 
+export interface AddSubStoreCommand <SubStoreType = any> {
+  subStoreName: string;
+  subStore: SubStoreType;
+}
+
 export interface SetStateCommand <StateType = any> {
   statePath: string;
   state: string[];
