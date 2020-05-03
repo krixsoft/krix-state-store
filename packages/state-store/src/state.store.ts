@@ -58,10 +58,15 @@ export class StateStore<StoreType = any> {
 
     const clonedState = KrixHelper.cloneDeep(subStore);
     KrixHelper.set(this.store, subStoreName, clonedState);
+    // Prepare and emit `Add Sub Store` command
+    const commandData: Interfaces.AddSubStoreCommand<SubStoreType> = {
+      subStoreName: subStoreName,
+      subStore: clonedSubStore,
+    };
 
     this.sjStoreCommands.next({
       type: Enums.StoreCommandType.AddSubStore,
-      data: clonedState,
+      data: commandData,
     });
   }
 
