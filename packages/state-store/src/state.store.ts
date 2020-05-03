@@ -40,7 +40,7 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Adds store partition to general store
+   * Adds a sub-store to the general store.
    *
    * @param  {string} subStoreName
    * @param  {SubStoreType} subStore
@@ -169,13 +169,16 @@ export class StateStore<StoreType = any> {
     }
 
     const statePath = this.getStatePath(stateAction.state);
+    // Get old value of state (for command)
     const oldValue = KrixHelper.get(this.store, statePath);
 
+    // Set the new state to the state if the new state isn't a signal
     const stateActionIsSignal = KrixHelper.get(stateAction, 'options.signal', false);
     if (stateActionIsSignal !== true) {
       KrixHelper.set(this.store, statePath, stateAction.value);
     }
 
+    // Emit a `Update State` signal to the `State Changes` subject if it exists
     if (this.stateChangesSubjectMap.has(statePath) === true) {
       const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
       sjStateChanges.next({
@@ -184,15 +187,18 @@ export class StateStore<StoreType = any> {
       });
     }
 
+    // Prepare and emit `Set State` command
+    const commandData: Interfaces.SetStateCommand = {
+      statePath: statePath,
+      state: stateAction.state,
+      oldValue: oldValue,
+      newValue: stateAction.value,
+      options: stateAction.options,
+    };
+
     this.sjStoreCommands.next({
       type: Enums.StoreCommandType.SetState,
-      data: {
-        statePath: statePath,
-        state: stateAction.state,
-        oldValue: oldValue,
-        newValue: stateAction.value,
-        options: stateAction.options,
-      },
+      data: commandData,
     });
   }
 
