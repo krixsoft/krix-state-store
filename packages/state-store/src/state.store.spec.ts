@@ -21,7 +21,6 @@ describe(`StateStore`, () => {
       it('should create "sjStoreChanges" and "sjStopSignal" RxJS Subjects', () => {
         const krixInst = new StateStore();
         expect(krixInst['sjStoreCommands']).to.be.an.instanceOf(Rx.Subject);
-        expect(krixInst['sjStopSignal']).to.be.an.instanceOf(Rx.Subject);
       });
     });
   });

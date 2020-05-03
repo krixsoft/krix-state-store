@@ -21,11 +21,6 @@ export class StateStore<StoreType = any> {
   private sjStoreCommands: Rx.Subject<Interfaces.StoreCommand>;
 
   /**
-   * Subject for stopping state watchers
-   */
-  private sjStopSignal: Rx.Subject<any>;
-
-  /**
    * Creates instance of Krix.
    *
    * @static
@@ -40,7 +35,6 @@ export class StateStore<StoreType = any> {
 
   constructor () {
     this.sjStoreCommands = new Rx.Subject();
-    this.sjStopSignal = new Rx.Subject();
     this.stateChangesSubjectMap = new Map();
     this.store = {} as StoreType;
   }
@@ -94,34 +88,36 @@ export class StateStore<StoreType = any> {
   ): Rx.Observable<StateType> {
     const statePath = this.getStatePath(state);
 
+    // Create a `State Change` subject if it isn't exists
     if (this.stateChangesSubjectMap.has(statePath) === false) {
       const sjStateChangesNew = new Rx.Subject<Interfaces.StateChange>();
       this.stateChangesSubjectMap.set(statePath, sjStateChangesNew);
     }
+    // Create the `State Change` subject
     const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
 
+    // Create observable which extracts data from `State Change` flow
     const obsStateChanges = sjStateChanges
       .pipe(
         RxOp.map((stateChange: Interfaces.StateChange<StateType>) => {
           return stateChange.newValue;
         }),
-        RxOp.takeUntil(this.sjStopSignal),
       );
 
-    if (onlyChanges) {
+    // Return observer which doesn't emit current value of state if `Only Changes` flag is enabled
+    if (onlyChanges === true) {
       return obsStateChanges;
     }
 
+    // Get current value of state and create sync observer from it
     const value = this.getStateByPath<StateType>(statePath);
     const obsCurrentState = Rx.of(value);
 
+    // Return observer which emits current value of state
     return Rx.merge(
       obsCurrentState,
       obsStateChanges,
-    )
-      .pipe(
-        RxOp.takeUntil(this.sjStopSignal),
-      );
+    );
   }
 
   /**
