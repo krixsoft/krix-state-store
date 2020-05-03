@@ -50,14 +50,21 @@ export class StateStore<StoreType = any> {
     subStoreName: string,
     subStore: SubStoreType,
   ): void {
-    const isPathAlreadyExists = KrixHelper.get(this.store, subStoreName);
-
-    if(KrixHelper.isUndefined(isPathAlreadyExists) === false) {
-      throw new Error(`StateStore - addStore: This store already exists`);
+    if (KrixHelper.isString(subStoreName) === false || subStoreName === ``) {
+      throw new Error(`StateStore - addStore: A sub store name mustn't be empty`);
     }
 
-    const clonedState = KrixHelper.cloneDeep(subStore);
-    KrixHelper.set(this.store, subStoreName, clonedState);
+    // Get old sub store
+    const oldSubStore = this.store[subStoreName];
+
+    if(KrixHelper.isUndefined(oldSubStore) === false) {
+      throw new Error(`StateStore - addStore: The sub store (${subStoreName}) already exists`);
+    }
+
+    // Clone the instance of sub store and add it to the general store
+    const clonedSubStore = KrixHelper.cloneDeep(subStore);
+    this.store[subStoreName] = clonedSubStore;
+
     // Prepare and emit `Add Sub Store` command
     const commandData: Interfaces.AddSubStoreCommand<SubStoreType> = {
       subStoreName: subStoreName,
