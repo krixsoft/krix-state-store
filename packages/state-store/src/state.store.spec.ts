@@ -96,7 +96,10 @@ describe(`StateStore`, () => {
     let stateStore: StateStore<any>;
     beforeEach(() => {
       stateStore = StateStore.create<any>();
-      stateStore.addSubStore('user', mockStore);
+      stateStore.setState({
+        state: [ 'user' ],
+        value: mockStore,
+      });
     });
 
     describe(`when method is invoked without state path`, () => {
@@ -150,7 +153,10 @@ describe(`StateStore`, () => {
     let stateStore: StateStore<any>;
     beforeEach(() => {
       stateStore = StateStore.create<any>();
-      stateStore.addSubStore('user', mockStore);
+      stateStore.setState({
+        state: [ 'user' ],
+        value: mockStore,
+      });
     });
 
     describe(`when method is invoked without state`, () => {
@@ -204,7 +210,10 @@ describe(`StateStore`, () => {
     let stateStore: StateStore<any>;
     beforeEach(() => {
       stateStore = StateStore.create<any>();
-      stateStore.addSubStore('user', mockStore);
+      stateStore.setState({
+        state: [ 'user' ],
+        value: mockStore,
+      });
     });
 
     describe(`when method is invoked without state action`, () => {
