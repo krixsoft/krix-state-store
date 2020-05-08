@@ -40,44 +40,6 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Adds a sub-store to the general store.
-   *
-   * @param  {string} subStoreName
-   * @param  {SubStoreType} subStore
-   * @return {void}
-   */
-  addSubStore <SubStoreType = any> (
-    subStoreName: string,
-    subStore: SubStoreType,
-  ): void {
-    if (KrixHelper.isString(subStoreName) === false || subStoreName === ``) {
-      throw new Error(`StateStore - addStore: A sub store name mustn't be empty`);
-    }
-
-    // Get old sub store
-    const oldSubStore = this.store[subStoreName];
-
-    if(KrixHelper.isUndefined(oldSubStore) === false) {
-      throw new Error(`StateStore - addStore: The sub store (${subStoreName}) already exists`);
-    }
-
-    // Clone the instance of sub store and add it to the general store
-    const clonedSubStore = KrixHelper.cloneDeep(subStore);
-    this.store[subStoreName] = clonedSubStore;
-
-    // Prepare and emit `Add Sub Store` command
-    const commandData: Interfaces.AddSubStoreCommand<SubStoreType> = {
-      subStoreName: subStoreName,
-      subStore: clonedSubStore,
-    };
-
-    this.sjStoreCommands.next({
-      type: Enums.StoreCommandType.AddSubStore,
-      data: commandData,
-    });
-  }
-
-  /**
    * Creates hot observable from `Store Changes` data flow and return it.
    *
    * @return {Rx.Observable<Interfaces.SetStateCommand>}
