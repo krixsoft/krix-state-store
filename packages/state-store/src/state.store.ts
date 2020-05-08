@@ -146,6 +146,12 @@ export class StateStore<StoreType = any> {
     // Get old value of state (for command)
     const oldValue = KrixHelper.get(this.store, statePath);
 
+    // Skip `Set State` command if old state has the same value as the new state
+    const stateActionCompareState = KrixHelper.get(stateAction, 'options.compare', false);
+    if (stateActionCompareState === true && oldValue === stateAction.value) {
+      return;
+    }
+
     // Set the new state to the state if the new state isn't a signal
     const stateActionIsSignal = KrixHelper.get(stateAction, 'options.signal', false);
     if (stateActionIsSignal !== true) {

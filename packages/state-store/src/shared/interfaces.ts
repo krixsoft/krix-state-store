@@ -2,6 +2,7 @@ import * as Enums from './enums';
 
 export interface StateActionOptions {
   signal?: boolean;
+  compare?: boolean;
 }
 
 export interface StateAction {
