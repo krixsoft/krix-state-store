@@ -1,6 +1,6 @@
 {
   "name": "@krix/state-store",
-  "version": "4.0.0-alpha.0",
+  "version": "5.0.0-alpha.0",
   "description": "Predictable State Store",
   "main": "./dist/index.js",
   "repository": {
