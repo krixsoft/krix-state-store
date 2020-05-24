@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
+import { describe } from 'mocha';
 // import * as sinon from 'sinon';
 import * as Rx from 'rxjs';
 
@@ -226,7 +227,7 @@ describe(`StateStore`, () => {
           stateStore.setState(arg);
         } catch (error) {
           methodError = error;
-          expect(error.toString()).to.deep.equal(resultError.toString());
+          expect((error as Error).toString()).to.deep.equal(resultError.toString());
         }
 
         expect(methodError).to.not.null;
@@ -245,7 +246,7 @@ describe(`StateStore`, () => {
             stateStore.setState(arg);
           } catch (error) {
             methodError = error;
-            expect(error.toString()).to.deep.equal(resultError.toString());
+            expect((error as Error).toString()).to.deep.equal(resultError.toString());
           }
 
           expect(methodError).to.not.null;

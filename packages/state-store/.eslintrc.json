@@ -41,8 +41,8 @@
     "@typescript-eslint/strict-boolean-expressions": "warn",
     "indent": "off",
     "@typescript-eslint/indent": [ "off" ],
-    "@typescript-eslint/class-name-casing": "warn",
-    "@typescript-eslint/interface-name-prefix": [ "warn", {
+    "@typescript-eslint/class-name-casing": [ "off" ],
+    "@typescript-eslint/interface-name-prefix": [ "off", {
       "prefixWithI": "never"
     }],
     "@typescript-eslint/consistent-type-definitions": [ "error", "interface" ],
@@ -51,6 +51,9 @@
     "@typescript-eslint/semi": [ "warn" ],
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {

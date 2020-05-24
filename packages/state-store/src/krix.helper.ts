@@ -70,7 +70,7 @@ export class KrixHelper {
   static set <V extends Object> (
     obj: V,
     path: string,
-    value: any,
+    value: unknown,
   ): void {
     if (KrixHelper.isObject(obj) === false || KrixHelper.isNull(obj) === true) {
       return;
@@ -105,7 +105,7 @@ export class KrixHelper {
    * @param  {any} value
    * @return {boolean}
    */
-  static isObject (value: any): boolean {
+  static isObject (value: unknown): boolean {
     return typeof value === `object`;
   }
 
@@ -115,7 +115,7 @@ export class KrixHelper {
    * @param  {any} value
    * @return {boolean}
    */
-  static isString (value: any): boolean {
+  static isString (value: unknown): boolean {
     return typeof value === `string`;
   }
 
@@ -125,7 +125,7 @@ export class KrixHelper {
    * @param  {any} value
    * @return {boolean}
    */
-  static isUndefined (value: any): boolean {
+  static isUndefined (value: unknown): boolean {
     return typeof value === `undefined`;
   }
 
@@ -135,7 +135,7 @@ export class KrixHelper {
    * @param  {any} value
    * @return {boolean}
    */
-  static isNull (value: any): boolean {
+  static isNull (value: unknown): boolean {
     return value === null;
   }
 }
