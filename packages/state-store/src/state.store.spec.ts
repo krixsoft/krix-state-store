@@ -105,7 +105,7 @@ describe(`StateStore`, () => {
     describe(`when method is invoked without state path`, () => {
       it('should return store', () => {
         const arg: any = undefined;
-        const result = stateStore.getStateByPath(arg);
+        const result = stateStore.getStateValueByStatePath(arg);
         expect(result).to.deep.equal({ user: mockStore });
       });
     });
@@ -113,7 +113,7 @@ describe(`StateStore`, () => {
       it('should return store', () => {
         const args: any[] = [ null, 0, [ `Hello!` ], { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = stateStore.getStateByPath(arg);
+          const result = stateStore.getStateValueByStatePath(arg);
           expect(result).to.deep.equal({ user: mockStore });
         });
       });
@@ -121,7 +121,7 @@ describe(`StateStore`, () => {
     describe(`when method is invoked with empty state path`, () => {
       it('should return store', () => {
         const arg: any = [];
-        const result = stateStore.getStateByPath(arg);
+        const result = stateStore.getStateValueByStatePath(arg);
         expect(result).to.deep.equal({ user: mockStore });
       });
     });
@@ -129,14 +129,14 @@ describe(`StateStore`, () => {
       describe(`and state exists in store`, () => {
         it('should return state', () => {
           const arg: any = `user.fName`;
-          const result = stateStore.getStateByPath(arg);
+          const result = stateStore.getStateValueByStatePath(arg);
           expect(result).to.equal(mockStore.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
         it('should return undefined', () => {
           const arg: any = `user.mName`;
-          const result = stateStore.getStateByPath(arg);
+          const result = stateStore.getStateValueByStatePath(arg);
           expect(result).to.be.undefined;
         });
       });

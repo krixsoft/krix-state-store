@@ -6,7 +6,7 @@ import { KrixHelper } from './krix.helper';
 
 export class StateStore<StoreType = any> {
   /**
-   * Krix store
+   * Krix state store
    */
   private store: any;
 
@@ -16,16 +16,15 @@ export class StateStore<StoreType = any> {
   private stateChangesSubjectMap: Map<string, Rx.Subject<Interfaces.StateChange>>;
 
   /**
-   * Subject for handling state changes
+   * Subject which handles store commands
    */
   private sjStoreCommands: Rx.Subject<Interfaces.StoreCommand>;
 
   /**
-   * Creates instance of Krix.
+   * Creates an instance of the Krix state store.
    *
    * @static
-   * @param  {Interfaces.KrixOptions<StoreType>} [options] - Krix options
-   * @return {Krix<StoreType>}
+   * @return {StateStore<StoreType>}
    */
   static create <StoreType> (
   ): StateStore<StoreType> {
@@ -40,9 +39,9 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Creates hot observable from `Store Changes` data flow and return it.
+   * Creates a `lite` RxJS observable from the `Store Commands` RxJS subject and returns it.
    *
-   * @return {Rx.Observable<Interfaces.SetStateCommand>}
+   * @return {Rx.Observable<Interfaces.StoreCommand>}
    */
   getStoreCommandObserver (
   ): Rx.Observable<Interfaces.StoreCommand> {
@@ -50,61 +49,63 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Returns state watcher - Observable which emits all changes of selected state.
+   * Returns a state watcher - a 'lite' RxJS observable which emits all changes of the selected state.
+   * If the `onlyChanges` flag is enabled the observable will receive a value after subscription.
    *
-   * @param  {string[]} state - parts of state path
+   * @param  {string[]} stateSelector - list of parts of state path
    * @param  {boolean} [onlyChanges=false] - emits only changes (without current state)
-   * @return {Rx.Observable<StateType>}
+   * @return {Rx.Observable<StateValueType>}
    */
-  select <StateType = any> (
-    state: string[],
+  select <StateValueType = any> (
+    stateSelector: string[],
     onlyChanges: boolean = false,
-  ): Rx.Observable<StateType> {
-    const statePath = this.getStatePath(state);
+  ): Rx.Observable<StateValueType> {
+    const statePath = this.getStatePath(stateSelector);
 
-    // Create a `State Change` subject if it isn't exists
+    // Create a `State Change` subject if it doesn't exist and save it to the `State Changes Subject` map
     if (this.stateChangesSubjectMap.has(statePath) === false) {
       const sjStateChangesNew = new Rx.Subject<Interfaces.StateChange>();
       this.stateChangesSubjectMap.set(statePath, sjStateChangesNew);
     }
-    // Create the `State Change` subject
+    // Get the `State Change` subject from the `State Changes Subject` map
     const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
 
-    // Create observable which extracts data from `State Change` flow
+    // Create an observable which extracts a state value from the `State Change` flow
     const obsStateChanges = sjStateChanges
       .pipe(
-        RxOp.map((stateChange: Interfaces.StateChange<StateType>) => {
+        RxOp.map((stateChange: Interfaces.StateChange<StateValueType>) => {
           return stateChange.newValue;
         }),
       );
 
-    // Return observer which doesn't emit current value of state if `Only Changes` flag is enabled
+    // Return an observer which doesn't emit a current value of the state if the `Only Changes` flag is enabled
     if (onlyChanges === true) {
       return obsStateChanges;
     }
 
-    // Get current value of state and create sync observer from it
-    const value = this.getStateByPath<StateType>(statePath);
-    const obsCurrentState = Rx.of(value);
+    // Get a current value of the state and create a sync observer from it
+    const stateValue = this.getStateValueByStatePath<StateValueType>(statePath);
+    const obsCurrentStateValue = Rx.of(stateValue);
 
-    // Return observer which emits current value of state
+    // Return an observer which emits a current value of the state
     return Rx.merge(
-      obsCurrentState,
+      obsCurrentStateValue,
       obsStateChanges,
     );
   }
 
   /**
-   * Returns state by parts of state path.
+   * Returns a state value by the state selector.
+   * If the state selector isn't set this method will return a store (a root state value).
    *
-   * @param  {string[]} [state] - parts of state path
-   * @return {StateType}
+   * @param  {string[]} [stateSelector] - state selector
+   * @return {StateValueType}
    */
-  getState <StateType = any> (
-    state?: string[],
-  ): StateType {
-    const statePath = this.getStatePath(state);
-    const stateValue = this.getStateByPath(statePath);
+  getState <StateValueType = any> (
+    stateSelector?: string[],
+  ): StateValueType {
+    const statePath = this.getStatePath(stateSelector);
+    const stateValue = this.getStateValueByStatePath(statePath);
     return stateValue;
   }
 
@@ -112,11 +113,11 @@ export class StateStore<StoreType = any> {
    * Returns state by state path.
    *
    * @param  {string} [statePath] - state path
-   * @return {StateType}
+   * @return {StateValueType}
    */
-  getStateByPath <StateType = any> (
+  getStateValueByStatePath <StateValueType = any> (
     statePath?: string,
-  ): StateType {
+  ): StateValueType {
     if (KrixHelper.isString(statePath) === false || statePath === ``) {
       return this.store;
     }
@@ -126,9 +127,12 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Sets new state using the state action.
+   * Sets a new state value to the store and emits `State Change` and `Store Command` signals for the new state.
+   * If the `signal` flag is enabled this method wosn't set the new value to the store.
+   * If the `compare` flag is enabled and an old value equals the new value this method wosn't save the new state
+   * to the store and wosn't emit the `State Change` signal.
    *
-   * @param  {Interfaces.StateAction} stateAction - action to change state
+   * @param  {Interfaces.StateAction} stateAction - action to change a state
    * @return {void}
    */
   setState (
@@ -143,22 +147,22 @@ export class StateStore<StoreType = any> {
     }
 
     const statePath = this.getStatePath(stateAction.state);
-    // Get old value of state (for command)
+    // Get an old value of the state (for command)
     const oldValue = KrixHelper.get(this.store, statePath);
 
-    // Skip `Set State` command if old state has the same value as the new state
-    const stateActionCompareState = KrixHelper.get(stateAction, 'options.compare', false);
+    // Skip the `Set State` logic if the old state has the same value as the new state
+    const stateActionCompareState = stateAction.options?.compare ?? false;
     if (stateActionCompareState === true && oldValue === stateAction.value) {
       return;
     }
 
-    // Set the new state to the state if the new state isn't a signal
-    const stateActionIsSignal = KrixHelper.get(stateAction, 'options.signal', false);
+    // Set the new state to the specific state if the `signal` flag is disabled
+    const stateActionIsSignal = stateAction.options?.signal ?? false;
     if (stateActionIsSignal !== true) {
       KrixHelper.set(this.store, statePath, stateAction.value);
     }
 
-    // Emit a `Update State` signal to the `State Changes` subject if it exists
+    // Emit a `State Change` signal to the `State Changes` subject if it exists
     if (this.stateChangesSubjectMap.has(statePath) === true) {
       const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
       sjStateChanges.next({
@@ -167,7 +171,7 @@ export class StateStore<StoreType = any> {
       });
     }
 
-    // Prepare and emit `Set State` command
+    // Prepare and emit a `Store Command` signal (a `Set State` command) to the `Store Commands` subject
     const commandData: Interfaces.SetStateCommand = {
       statePath: statePath,
       state: stateAction.state,
@@ -183,7 +187,7 @@ export class StateStore<StoreType = any> {
   }
 
   /**
-   * Sets new states using state actions.
+   * Sets new state values to the store. This method calls the `Set State` logic for every state action.
    *
    * @param  {Interfaces.StateAction[]} stateActions - actions to change states
    * @return {void}
@@ -205,19 +209,19 @@ export class StateStore<StoreType = any> {
    */
 
   /**
-   * Creates state path from parts of state path.
+   * Creates a state path from the state selector.
    *
-   * @param  {string[]} state - parts of state path
-   * @return {string} - State path
+   * @param  {string[]} stateSelector - parts of state path
+   * @return {string} - state path
    */
   private getStatePath (
-    state: string[],
+    stateSelector: string[],
   ): string {
-    if (Array.isArray(state) === false) {
+    if (Array.isArray(stateSelector) === false) {
       return ``;
     }
 
-    const statePath = state.join('.');
+    const statePath = stateSelector.join('.');
     return statePath;
   }
 }
