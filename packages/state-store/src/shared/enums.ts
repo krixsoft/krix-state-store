@@ -1,4 +1,4 @@
 
-export enum StoreCommandType {
+export enum StoreCommandName {
   SetState = 'set-state',
 }

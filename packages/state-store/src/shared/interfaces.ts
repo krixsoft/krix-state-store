@@ -16,7 +16,7 @@ export interface KrixOptions <StoreType> {
 }
 
 export interface StoreCommand <StoreCommandDataType = any> {
-  type: Enums.StoreCommandType;
+  name: Enums.StoreCommandName;
   data: StoreCommandDataType;
 }
 

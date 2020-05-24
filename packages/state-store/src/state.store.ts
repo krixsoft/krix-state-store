@@ -177,7 +177,7 @@ export class StateStore<StoreType = any> {
     };
 
     this.sjStoreCommands.next({
-      type: Enums.StoreCommandType.SetState,
+      name: Enums.StoreCommandName.SetState,
       data: commandData,
     });
   }
