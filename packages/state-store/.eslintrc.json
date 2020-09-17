@@ -38,7 +38,9 @@
     "@typescript-eslint/no-floating-promises": "warn",
     "@typescript-eslint/no-this-alias": "warn",
     "@typescript-eslint/no-use-before-define": "warn",
-    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "@typescript-eslint/strict-boolean-expressions": [ "warn", {
+      "allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing": true
+    }],
     "indent": "off",
     "@typescript-eslint/indent": [ "off" ],
     "@typescript-eslint/class-name-casing": [ "off" ],
@@ -77,7 +79,8 @@
     "no-duplicate-case": "warn",
     "no-redeclare": "warn",
     "no-return-await": "warn",
-    "no-shadow": "warn",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": [ "warn" ],
     "no-throw-literal": "warn",
     "no-fallthrough": "warn",
     "no-unused-expressions": "warn",

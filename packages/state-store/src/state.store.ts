@@ -24,11 +24,11 @@ export class StateStore<StoreType = any> {
    * Creates an instance of the Krix state store.
    *
    * @static
-   * @return {StateStore<StoreType>}
+   * @return {StateStore<CreateStoreType>}
    */
-  static create <StoreType> (
-  ): StateStore<StoreType> {
-    const inst = new StateStore<StoreType>();
+  static create <CreateStoreType = any> (
+  ): StateStore<CreateStoreType> {
+    const inst = new StateStore<CreateStoreType>();
     return inst;
   }
 
