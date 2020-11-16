@@ -28,6 +28,7 @@ exports[`pkg:update-main`] = function pkgUpdateMainInPackageJSON () {
 exports[`pkg:copy-metafiles`] = function pkgCopyMetafiles () {
   return gulp.src([
     `./LICENSE.md`,
+    `./README.md`,
   ])
     .pipe(gulp.dest(`${distFolder}`));
 };
