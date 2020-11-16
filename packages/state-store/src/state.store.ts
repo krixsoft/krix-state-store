@@ -128,9 +128,9 @@ export class StateStore<StoreType = any> {
 
   /**
    * Sets a new state value to the store and emits `State Change` and `Store Command` signals for the new state.
-   * If the `signal` flag is enabled this method wosn't set the new value to the store.
-   * If the `compare` flag is enabled and an old value equals the new value this method wosn't save the new state
-   * to the store and wosn't emit the `State Change` signal.
+   * If the `signal` flag is enabled this method won't set the new value to the store.
+   * If the `compare` flag is enabled and the old value equals the new value, this method won't save the new state
+   * to the store and won't emit the `State Change` signal.
    *
    * @param  {Interfaces.StateAction} stateAction - action to change a state
    * @return {void}
@@ -214,7 +214,7 @@ export class StateStore<StoreType = any> {
    * @param  {string[]} stateSelector - parts of state path
    * @return {string} - state path
    */
-  private getStatePath (
+  getStatePath (
     stateSelector: string[],
   ): string {
     if (Array.isArray(stateSelector) === false) {
