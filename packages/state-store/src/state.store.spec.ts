@@ -324,6 +324,81 @@ beforeEach(() => {
           });
         });
       });
+
+      describe(`and state is a path to existing non-object property and 'merge' flag is enabled`, () => {
+        it('should update property in the store', () => {
+          const arg: Interfaces.StateAction = {
+            state: [ `user`, `fName` ],
+            value: {
+              mName: `Vova`,
+            },
+            options: {
+              merge: true,
+            },
+          };
+
+          const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(oldFNameState).to.equal(mockStore.fName);
+
+          stateStore.setState(arg);
+
+          const newFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(newFNameState).to.equal(arg.value);
+        });
+      });
+      describe(`and state is a path to existing object property and 'merge' flag is enabled`, () => {
+        describe(`and we don't change old internal properties`, () => {
+          it(`should merge property and don't change old internal properties`, () => {
+            const arg: Interfaces.StateAction = {
+              state: [ `user` ],
+              value: {
+                mName: `Vova`,
+              },
+              options: {
+                merge: true,
+              },
+            };
+
+            const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(oldFNameState).to.equal(mockStore.fName);
+            const oldMNameState = stateStore.getState([ `user`, `mName` ]);
+            expect(oldMNameState).to.be.undefined;
+
+            stateStore.setState(arg);
+
+            const newFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(newFNameState).to.equal(mockStore.fName);
+            const newMNameState = stateStore.getState([ `user`, `mName` ]);
+            expect(newMNameState).to.equal(arg.value.mName);
+          });
+        });
+        describe(`and we change old internal properties`, () => {
+          it(`should merge property and change old internal properties`, () => {
+            const arg: Interfaces.StateAction = {
+              state: [ `user` ],
+              value: {
+                fName: `Oleg`,
+                mName: `Vova`,
+              },
+              options: {
+                merge: true,
+              },
+            };
+
+            const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(oldFNameState).to.equal(mockStore.fName);
+            const oldMNameState = stateStore.getState([ `user`, `mName` ]);
+            expect(oldMNameState).to.be.undefined;
+
+            stateStore.setState(arg);
+
+            const newFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(newFNameState).to.equal(arg.value.fName);
+            const newMNameState = stateStore.getState([ `user`, `mName` ]);
+            expect(newMNameState).to.equal(arg.value.mName);
+          });
+        });
+      });
     });
   });
 });
