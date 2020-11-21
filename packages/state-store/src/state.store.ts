@@ -154,17 +154,11 @@ export class StateStore<StoreType = any> {
 
     const stateActionMergeState = stateAction.options?.merge;
     let updatedStateValue: any = newStateValue;
+    let mergeValueWasUpdated = false;
     if (stateActionMergeState === true) {
       if (KrixHelper.isObject(newStateValue) === true && KrixHelper.isObject(oldStateValue) === true) {
         updatedStateValue = Object.assign({}, oldStateValue, newStateValue);
-
-        for (const key in newStateValue) {
-          if (Object.prototype.hasOwnProperty.call(newStateValue, key) === false) {
-            continue;
-          }
-
-          this.notifyObserver(`${statePath}.${key}`, oldStateValue[key], newStateValue[key]);
-        }
+        mergeValueWasUpdated = true;
       }
     }
 
@@ -172,6 +166,16 @@ export class StateStore<StoreType = any> {
     const stateActionIsSignal = stateAction.options?.signal ?? false;
     if (stateActionIsSignal !== true) {
       KrixHelper.set(this.store, statePath, updatedStateValue);
+    }
+
+    if (mergeValueWasUpdated === true) {
+      for (const key in newStateValue) {
+        if (Object.prototype.hasOwnProperty.call(newStateValue, key) === false) {
+          continue;
+        }
+
+        this.notifyObserver(`${statePath}.${key}`, oldStateValue[key], newStateValue[key]);
+      }
     }
 
     this.notifyObserver(statePath, oldStateValue, updatedStateValue);
