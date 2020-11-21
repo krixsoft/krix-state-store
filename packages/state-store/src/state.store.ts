@@ -73,7 +73,7 @@ export class StateStore<StoreType = any> {
     // Create an observable which extracts a state value from the `State Change` flow
     const obsStateChanges = sjStateChanges
       .pipe(
-        RxOp.map((stateChange: Interfaces.StateChange<StateValueType>) => {
+        RxOp.map((stateChange: Interfaces.StateChange) => {
           return stateChange.newValue;
         }),
       );
@@ -84,7 +84,7 @@ export class StateStore<StoreType = any> {
     }
 
     // Get a current value of the state and create a sync observer from it
-    const stateValue = this.getStateValueByStatePath<StateValueType>(statePath);
+    const stateValue = this.getState<StateValueType>(statePath);
     const obsCurrentStateValue = Rx.of(stateValue);
 
     // Return an observer which emits a current value of the state
@@ -143,26 +143,34 @@ export class StateStore<StoreType = any> {
 
     const statePath = this.getStatePath(stateAction.state);
     // Get an old value of the state (for command)
-    const oldValue = KrixHelper.get(this.store, statePath);
+    const oldStateValue = KrixHelper.get(this.store, statePath);
+    let newStateValue = stateAction.value;
 
     // Skip the `Set State` logic if the old state has the same value as the new state
-    const stateActionCompareState = stateAction.options?.compare ?? false;
-    if (stateActionCompareState === true && oldValue === stateAction.value) {
+    const stateActionCompareState = stateAction.options?.compare;
+    if (stateActionCompareState === true && oldStateValue === newStateValue) {
       return;
+    }
+
+    const stateActionMergeState = stateAction.options?.merge;
+    if (stateActionMergeState === true) {
+      if (KrixHelper.isObject(newStateValue) === true && KrixHelper.isObject(oldStateValue) === true) {
+        newStateValue = Object.assign({}, oldStateValue, newStateValue);
+      }
     }
 
     // Set the new state to the specific state if the `signal` flag is disabled
     const stateActionIsSignal = stateAction.options?.signal ?? false;
     if (stateActionIsSignal !== true) {
-      KrixHelper.set(this.store, statePath, stateAction.value);
+      KrixHelper.set(this.store, statePath, newStateValue);
     }
 
     // Emit a `State Change` signal to the `State Changes` subject if it exists
     if (this.stateChangesSubjectMap.has(statePath) === true) {
       const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
       sjStateChanges.next({
-        oldValue: oldValue,
-        newValue: stateAction.value,
+        oldValue: oldStateValue,
+        newValue: newStateValue,
       });
     }
 
@@ -170,8 +178,8 @@ export class StateStore<StoreType = any> {
     const commandData: Interfaces.SetStateCommand = {
       statePath: statePath,
       state: stateAction.state,
-      oldValue: oldValue,
-      newValue: stateAction.value,
+      oldValue: oldStateValue,
+      newValue: newStateValue,
       options: stateAction.options,
     };
 

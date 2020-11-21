@@ -1,13 +1,33 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { describe } from 'mocha';
 // import * as sinon from 'sinon';
 import * as Rx from 'rxjs';
+import * as _ from 'lodash';
 
 import { StateStore } from './state.store';
 import { Interfaces } from './shared';
 
 describe(`StateStore`, () => {
+  const mockStore = {
+    id: 51,
+    fName: `Ivan`,
+    lName: `Ivanov`,
+};
+
+let stateStore: StateStore<any>;
+beforeEach(() => {
+  const mockStoreClone = _.clone({
+    id: 51,
+    fName: `Ivan`,
+    lName: `Ivanov`,
+  });
+  stateStore = StateStore.create<any>();
+  stateStore.setState({
+    state: [ 'user' ],
+    value: mockStoreClone,
+  });
+});
+
   describe(`create`, () => {
     describe(`when method is invoked`, () => {
       it('should return instance of StateStore', () => {
@@ -27,15 +47,10 @@ describe(`StateStore`, () => {
   });
 
   describe(`getStatePath`, () => {
-    let stateStore: StateStore<any>;
-    beforeEach(() => {
-      stateStore = new StateStore();
-    });
-
     describe(`when method is invoked without state`, () => {
       it('should return empty path', () => {
         const arg: any = undefined;
-        const result = stateStore['getStatePath'](arg);
+        const result = stateStore.getStatePath(arg);
         expect(result).to.equal(``);
       });
     });
@@ -43,7 +58,7 @@ describe(`StateStore`, () => {
       it('should return empty string', () => {
         const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = stateStore['getStatePath'](arg);
+          const result = stateStore.getStatePath(arg);
           expect(result).to.equal(``);
         });
       });
@@ -51,7 +66,7 @@ describe(`StateStore`, () => {
     describe(`when method is invoked with empty array state`, () => {
       it('should return empty string', () => {
         const arg: any = [];
-        const result = stateStore['getStatePath'](arg);
+        const result = stateStore.getStatePath(arg);
         expect(result).to.equal(``);
       });
     });
@@ -59,62 +74,47 @@ describe(`StateStore`, () => {
       describe(`and state has one string values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ `hello` ];
-          const result = stateStore['getStatePath'](arg);
+          const result = stateStore.getStatePath(arg);
           expect(result).to.equal(`hello`);
         });
       });
       describe(`and parts of state have string values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ `hello`, `world` ];
-          const result = stateStore['getStatePath'](arg);
+          const result = stateStore.getStatePath(arg);
           expect(result).to.equal(`hello.world`);
         });
       });
       describe(`and parts of state have number values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ 4, 5 ];
-          const result = stateStore['getStatePath'](arg);
+          const result = stateStore.getStatePath(arg);
           expect(result).to.equal(`4.5`);
         });
       });
       describe(`and parts of state have object values`, () => {
         it('should return correct non-empty string', () => {
           const arg: any = [ { hello: `world` }, { a: `b` } ];
-          const result = stateStore['getStatePath'](arg);
+          const result = stateStore.getStatePath(arg);
           expect(result).to.equal(`[object Object].[object Object]`);
         });
       });
     });
   });
 
-  describe(`getStateByPath`, () => {
-    const mockStore = {
-        id: 51,
-        fName: `Ivan`,
-        lName: `Ivanov`,
-    };
-
-    let stateStore: StateStore<any>;
-    beforeEach(() => {
-      stateStore = StateStore.create<any>();
-      stateStore.setState({
-        state: [ 'user' ],
-        value: mockStore,
-      });
-    });
-
+  describe(`getState`, () => {
     describe(`when method is invoked without state path`, () => {
       it('should return store', () => {
         const arg: any = undefined;
-        const result = stateStore.getStateValueByStatePath(arg);
+        const result = stateStore.getState(arg);
         expect(result).to.deep.equal({ user: mockStore });
       });
     });
     describe(`when method is invoked with non-string state path`, () => {
       it('should return store', () => {
-        const args: any[] = [ null, 0, [ `Hello!` ], { hello: `world` } ];
+        const args: any[] = [ null, 0, { hello: `world` } ];
         args.forEach((arg: any) => {
-          const result = stateStore.getStateValueByStatePath(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.deep.equal({ user: mockStore });
         });
       });
@@ -122,7 +122,7 @@ describe(`StateStore`, () => {
     describe(`when method is invoked with empty state path`, () => {
       it('should return store', () => {
         const arg: any = [];
-        const result = stateStore.getStateValueByStatePath(arg);
+        const result = stateStore.getState(arg);
         expect(result).to.deep.equal({ user: mockStore });
       });
     });
@@ -130,33 +130,16 @@ describe(`StateStore`, () => {
       describe(`and state exists in store`, () => {
         it('should return state', () => {
           const arg: any = `user.fName`;
-          const result = stateStore.getStateValueByStatePath(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.equal(mockStore.fName);
         });
       });
       describe(`and state doesn't exist in store`, () => {
         it('should return undefined', () => {
           const arg: any = `user.mName`;
-          const result = stateStore.getStateValueByStatePath(arg);
+          const result = stateStore.getState(arg);
           expect(result).to.be.undefined;
         });
-      });
-    });
-  });
-
-  describe(`getState`, () => {
-    const mockStore = {
-        id: 51,
-        fName: `Ivan`,
-        lName: `Ivanov`,
-    };
-
-    let stateStore: StateStore<any>;
-    beforeEach(() => {
-      stateStore = StateStore.create<any>();
-      stateStore.setState({
-        state: [ 'user' ],
-        value: mockStore,
       });
     });
 
@@ -169,7 +152,7 @@ describe(`StateStore`, () => {
     });
     describe(`when method is invoked with non-array state`, () => {
       it('should return store', () => {
-        const args: any[] = [ null, 0, ``, `Hello!`, { hello: `world` } ];
+        const args: any[] = [ null, 0, ``, { hello: `world` } ];
         args.forEach((arg: any) => {
           const result = stateStore.getState(arg);
           expect(result).to.deep.equal({ user: mockStore });
@@ -202,21 +185,6 @@ describe(`StateStore`, () => {
   });
 
   describe(`setState`, () => {
-    const mockStore = {
-        id: 51,
-        fName: `Ivan`,
-        lName: `Ivanov`,
-    };
-
-    let stateStore: StateStore<any>;
-    beforeEach(() => {
-      stateStore = StateStore.create<any>();
-      stateStore.setState({
-        state: [ 'user' ],
-        value: mockStore,
-      });
-    });
-
     describe(`when method is invoked without state action`, () => {
       it('should throw error', () => {
         const resultError = new Error(`StateStore - setState: State action isn't exist`);
@@ -272,15 +240,13 @@ describe(`StateStore`, () => {
             value: `Dima`,
           };
 
-          const oldStore = stateStore.getState();
-          expect(oldStore[arg.state[0]][arg.state[1]])
-            .to.be.undefined;
+          const oldFNameState = stateStore.getState([ `user`, `mName` ]);
+          expect(oldFNameState).to.be.undefined;
 
           stateStore.setState(arg);
 
-          const newStore = stateStore.getState();
-          expect(newStore[arg.state[0]][arg.state[1]])
-            .to.equal(arg.value);
+          const newFNameState = stateStore.getState([ `user`, `mName` ]);
+          expect(newFNameState).to.equal(arg.value);
         });
       });
       describe(`and state is a path to existing property`, () => {
@@ -290,15 +256,72 @@ describe(`StateStore`, () => {
             value: `Dima`,
           };
 
-          const oldStore = stateStore.getState();
-          expect(oldStore[arg.state[0]][arg.state[1]])
-            .to.equal((mockStore as any)[arg.state[1]]);
+          const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(oldFNameState).to.equal(mockStore.fName);
 
           stateStore.setState(arg);
 
-          const newStore = stateStore.getState();
-          expect(newStore[arg.state[0]][arg.state[1]])
-            .to.equal(arg.value);
+          const newFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(newFNameState).to.equal(arg.value);
+        });
+      });
+      describe(`and state is a path to existing property and 'signal' flag is enabled`, () => {
+        it(`shouldn't update property in the store`, () => {
+          const arg: Interfaces.StateAction = {
+            state: [ `user`, `fName` ],
+            value: `Dima`,
+            options: {
+              signal: true,
+            },
+          };
+
+          const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(oldFNameState).to.equal(mockStore.fName);
+
+          stateStore.setState(arg);
+
+          const newFNameState = stateStore.getState([ `user`, `fName` ]);
+          expect(newFNameState).not.to.equal(arg.value);
+        });
+      });
+      describe(`and state is a path to existing property and 'compare' flag is enabled`, () => {
+        describe(`and state is changed`, () => {
+          it('should update property in the store', () => {
+            const arg: Interfaces.StateAction = {
+              state: [ `user`, `fName` ],
+              value: `Dima`,
+              options: {
+                compare: true,
+              },
+            };
+
+            const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(oldFNameState).to.equal(mockStore.fName);
+
+            stateStore.setState(arg);
+
+            const newFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(newFNameState).to.equal(arg.value);
+          });
+        });
+        describe(`but state isn't changed`, () => {
+          it(`shouldn't update property in the store`, () => {
+            const arg: Interfaces.StateAction = {
+              state: [ `user`, `fName` ],
+              value: `Dima`,
+              options: {
+                compare: true,
+              },
+            };
+
+            const oldFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(oldFNameState).to.equal(mockStore.fName);
+
+            stateStore.setState(arg);
+
+            const newFNameState = stateStore.getState([ `user`, `fName` ]);
+            expect(newFNameState).to.equal(arg.value);
+          });
         });
       });
     });
