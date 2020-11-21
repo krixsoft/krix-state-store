@@ -144,7 +144,7 @@ export class StateStore<StoreType = any> {
     const statePath = this.getStatePath(stateAction.state);
     // Get an old value of the state (for command)
     const oldStateValue = KrixHelper.get(this.store, statePath);
-    let newStateValue = stateAction.value;
+    const newStateValue = stateAction.value;
 
     // Skip the `Set State` logic if the old state has the same value as the new state
     const stateActionCompareState = stateAction.options?.compare;
@@ -153,33 +153,35 @@ export class StateStore<StoreType = any> {
     }
 
     const stateActionMergeState = stateAction.options?.merge;
+    let updatedStateValue: any = newStateValue;
     if (stateActionMergeState === true) {
       if (KrixHelper.isObject(newStateValue) === true && KrixHelper.isObject(oldStateValue) === true) {
-        newStateValue = Object.assign({}, oldStateValue, newStateValue);
+        updatedStateValue = Object.assign({}, oldStateValue, newStateValue);
+
+        for (const key in newStateValue) {
+          if (Object.prototype.hasOwnProperty.call(newStateValue, key) === false) {
+            continue;
+          }
+
+          this.notifyObserver(`${statePath}.${key}`, oldStateValue[key], newStateValue[key]);
+        }
       }
     }
 
     // Set the new state to the specific state if the `signal` flag is disabled
     const stateActionIsSignal = stateAction.options?.signal ?? false;
     if (stateActionIsSignal !== true) {
-      KrixHelper.set(this.store, statePath, newStateValue);
+      KrixHelper.set(this.store, statePath, updatedStateValue);
     }
 
-    // Emit a `State Change` signal to the `State Changes` subject if it exists
-    if (this.stateChangesSubjectMap.has(statePath) === true) {
-      const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
-      sjStateChanges.next({
-        oldValue: oldStateValue,
-        newValue: newStateValue,
-      });
-    }
+    this.notifyObserver(statePath, oldStateValue, updatedStateValue);
 
     // Prepare and emit a `Store Command` signal (a `Set State` command) to the `Store Commands` subject
     const commandData: Interfaces.SetStateCommand = {
       statePath: statePath,
       state: stateAction.state,
       oldValue: oldStateValue,
-      newValue: newStateValue,
+      newValue: updatedStateValue,
       options: stateAction.options,
     };
 
@@ -226,5 +228,28 @@ export class StateStore<StoreType = any> {
 
     const statePath = stateSelector.join('.');
     return statePath;
+  }
+
+  /**
+   * Sends the `StateChange` request to all observers by the state path.
+   *
+   * @param  {string} statePath
+   * @param  {any} oldStateValue
+   * @param  {any} newStateValue
+   * @return {void}
+   */
+  private notifyObserver (
+    statePath: string,
+    oldStateValue: any,
+    newStateValue: any,
+  ): void {
+    // Emit a `State Change` signal to the `State Changes` subject if it exists
+    if (this.stateChangesSubjectMap.has(statePath) === true) {
+      const sjStateChanges = this.stateChangesSubjectMap.get(statePath);
+      sjStateChanges.next({
+        oldValue: oldStateValue,
+        newValue: newStateValue,
+      });
+    }
   }
 }
