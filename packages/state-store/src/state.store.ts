@@ -102,23 +102,18 @@ export class StateStore<StoreType = any> {
    * @return {StateValueType}
    */
   getState <StateValueType = any> (
-    stateSelector?: string[],
+    stateSelector?: string[]|string,
   ): StateValueType {
-    const statePath = this.getStatePath(stateSelector);
-    const stateValue = this.getStateValueByStatePath(statePath);
-    return stateValue;
-  }
+    let statePathIsString = KrixHelper.isString(stateSelector) === true;
+    let statePath: string;
+    if (statePathIsString === true) {
+      statePath = stateSelector as string;
+    } else {
+      statePathIsString = true;
+      statePath = this.getStatePath(stateSelector as string[]);
+    }
 
-  /**
-   * Returns state by state path.
-   *
-   * @param  {string} [statePath] - state path
-   * @return {StateValueType}
-   */
-  getStateValueByStatePath <StateValueType = any> (
-    statePath?: string,
-  ): StateValueType {
-    if (KrixHelper.isString(statePath) === false || statePath === ``) {
+    if (statePath === ``) {
       return this.store;
     }
 
