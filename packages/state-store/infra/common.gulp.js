@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const gulp = require(`gulp`);
 const eslint = require(`gulp-eslint`);
 const del = require(`del`);
-const mocha = require(`gulp-mocha`);
 
-const sourceFolder = `./src`;
-const distFolder = `./dist`;
+const sourceFolder = `../src`;
+const distFolder = `../dist`;
 
 exports[`clear:dist`] = async function clearDistTask () {
   const delResult = await del([ `${distFolder}/*`, `!${distFolder}/index.d.ts` ], { force: true });
@@ -32,27 +30,6 @@ exports[`move:jts`] = function moveJTSTask () {
 
 exports[`eslint`] = function eslintTask () {
   return gulp.src(`${sourceFolder}/**/*.ts`)
-    .pipe(eslint())
+    .pipe(eslint(`../.eslintrc.js`))
     .pipe(eslint.format());
 };
-
-/**
- * Tests
- */
-
-exports[`test:start`] = function test () {
-  return gulp.src(`${distFolder}/**/*.spec.js`)
-    .pipe(mocha({ reporter: 'spec', exit: true }))
-    .once('error', (error) => {
-      console.error(error);
-    });
-};
-
-exports[`test:watch`] = gulp.series(
-  exports[`test:start`],
-  function testWatch () {
-    return gulp.watch([
-      `${distFolder}/**/*.js`,
-    ], gulp.series(exports[`test:start`]));
-  },
-);

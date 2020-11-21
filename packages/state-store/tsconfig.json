@@ -3,7 +3,7 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
-    "baseUrl": "src",
+    "rootDir": ".",
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
@@ -24,7 +24,7 @@
   ],
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts",
+    "spec/**/*.ts",
     "typings/**/*.ts",
     // etc
     

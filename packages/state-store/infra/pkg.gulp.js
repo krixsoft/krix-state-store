@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const gulp = require(`gulp`);
 const replace = require('gulp-replace');
 const LinfraCore = require(`@linfra/core`);
@@ -10,7 +9,7 @@ module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
 );
 exports = module.exports;
 
-const distFolder = `./dist`;
+const distFolder = `../dist`;
 
 /**
  * Package Prepublish Logic

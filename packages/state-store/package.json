@@ -11,12 +11,11 @@
     "access": "public"
   },
   "scripts": {
-    "gulp:clear:dist": "gulp --gulpfile=./common.gulp.js clear:dist",
-    "gulp:clear:test": "gulp --gulpfile=./common.gulp.js clear:test",
+    "gulp:clear:dist": "gulp --gulpfile=./infra/common.gulp.js clear:dist",
     "webpack:build": "webpack --config webpack.prod.js --progress --colors",
-    "dev:build": "gulp --gulpfile=./build.gulp.js build",
-    "dev:watch": "gulp --gulpfile=./watch-pkg.gulp.js watch",
-    "dev:test": "gulp --gulpfile=./watch-pkg.gulp.js test:watch",
+    "dev:build": "gulp --gulpfile=./infra/build.gulp.js build:pkg",
+    "dev:watch": "gulp --gulpfile=./infra/watch.gulp.js dev:watch",
+    "dev:test": "gulp --gulpfile=./infra/test.gulp.js test:watch",
     "pkg:build": "npm run gulp:clear:dist && npm run webpack:build && gulp --gulpfile=./pkg.gulp.js pkg:prepublish"
   },
   "keywords": [

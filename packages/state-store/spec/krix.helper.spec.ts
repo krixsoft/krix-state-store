@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 
-import { KrixHelper } from './krix.helper';
+import { KrixHelper } from '../dist/krix.helper';
 
 describe(`KrixHelper`, () => {
   describe(`cloneDeep`, () => {

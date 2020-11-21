@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const gulp = require(`gulp`);
 const LinfraCore = require(`@linfra/core`);
 
@@ -11,18 +10,18 @@ module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
 );
 exports = module.exports;
 
-const sourceFolder = `./src`;
+const sourceFolder = `../src`;
 
 /**
  * TS Compilator
  */
 
-exports[`watch`] = gulp.series(
+exports[`dev:watch`] = gulp.series(
   function watchPkgTask () {
     return gulp.watch([
       `${sourceFolder}/**/*.ts`,
       `${sourceFolder}/**/*.js`,
       `${sourceFolder}/**/*.json`,
-    ], gulp.series(exports[`build`]));
+    ], gulp.series(exports[`build:pkg`]));
   },
 );

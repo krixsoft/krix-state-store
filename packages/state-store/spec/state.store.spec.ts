@@ -4,11 +4,11 @@ import { expect } from 'chai';
 import * as Rx from 'rxjs';
 import * as _ from 'lodash';
 
-import { StateStore } from './state.store';
-import { Interfaces } from './shared';
+import { StateStore } from '../dist/state.store';
+import { Interfaces } from '../dist/shared';
 
-import { DoneAfterTickManager } from './spec/done-after-tick.manager';
-import { SubscriptionManager } from './spec/subscription.manager';
+import { DoneAfterTickManager } from './core/done-after-tick.manager';
+import { SubscriptionManager } from './core/subscription.manager';
 
 describe(`StateStore`, () => {
   const mockStore = {
