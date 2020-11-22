@@ -21,13 +21,31 @@
   "keywords": [
     "krix",
     "state",
-    "predictable",
+    "store",
+    "storage",
     "state-store"
   ],
   "authors": [
-    "Andrey Shuleiko <geass1000@gmail.com> (https://github.com/Geass1000)",
-    "Artur Huziahmetov <artur7work@gmail.com> (https://github.com/Huziahmetov-Artur)",
-    "Daniil Agaev <kreksalix@gmail.com> (https://github.com/Krelix1)"
+    {
+      "name": "Andrey Shuleiko (Developer)",
+      "email": "geass1000@gmail.com",
+      "url": "https://github.com/Geass1000"
+    },
+    {
+      "name": "Artur Huziahmetov (Developer)",
+      "email": "artur7work@gmail.com",
+      "url": "https://github.com/Huziahmetov-Artur"
+    },
+    {
+      "name": "Daniil Agaev (Developer)",
+      "email": "kreksalix@gmail.com",
+      "url": "https://github.com/Krelix1"
+    },
+    {
+      "name": "Liza Kiriluk (Technical writer)",
+      "email": "lizakiriluk@gmail.com",
+      "url": "https://github.com/LizaKiriluk"
+    }
   ],
   "license": "MIT",
   "devDependencies": {

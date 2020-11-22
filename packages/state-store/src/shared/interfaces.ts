@@ -17,16 +17,16 @@ export interface StateActionOptions {
 
 export interface StateAction {
   /**
-   * Full path to the state in the state-store.
+   * The full path to the state in the state-store.
    * Eg: [ 'session', 'id' ] or [ 'user', 'name' ] or [ 'app', 'spinnerIsShown' ]
    */
   state: string[];
   /**
-   * A value which we set to in the state.
+   * A value which we set in the state.
    */
   value: any;
   /**
-   * An action configuration.
+   * An additional action's options.
    */
   options?: StateActionOptions;
 }
