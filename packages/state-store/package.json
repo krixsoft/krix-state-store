@@ -1,7 +1,7 @@
 {
   "name": "@krix/state-store",
   "version": "5.1.0-alpha.0",
-  "description": "Predictable State Store",
+  "description": "State Store",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -12,11 +12,11 @@
   },
   "scripts": {
     "gulp:clear:dist": "gulp --gulpfile=./infra/common.gulp.js clear:dist",
-    "webpack:build": "webpack --config webpack.prod.js --progress --colors",
+    "webpack:build": "webpack --config webpack.prod.js --progress --color",
     "dev:build": "gulp --gulpfile=./infra/build.gulp.js build:pkg",
     "dev:watch": "gulp --gulpfile=./infra/watch.gulp.js dev:watch",
     "dev:test": "gulp --gulpfile=./infra/test.gulp.js test:watch",
-    "pkg:build": "npm run gulp:clear:dist && npm run webpack:build && gulp --gulpfile=./pkg.gulp.js pkg:prepublish"
+    "pkg:build": "npm run gulp:clear:dist && npm run webpack:build && gulp --gulpfile=./infra/pkg.gulp.js pkg:prepublish"
   },
   "keywords": [
     "krix",

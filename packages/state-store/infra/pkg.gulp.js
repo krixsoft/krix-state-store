@@ -17,7 +17,7 @@ const distFolder = `../dist`;
 
 exports[`pkg:update-main`] = function pkgUpdateMainInPackageJSON () {
   return gulp.src([
-    `./package.json`,
+    `../package.json`,
   ])
     .pipe(replace(/\.\/dist\/index\.js/g, './index.js'))
     .pipe(gulp.dest(`${distFolder}`));
@@ -25,8 +25,8 @@ exports[`pkg:update-main`] = function pkgUpdateMainInPackageJSON () {
 
 exports[`pkg:copy-metafiles`] = function pkgCopyMetafiles () {
   return gulp.src([
-    `./LICENSE.md`,
-    `./README.md`,
+    `../LICENSE.md`,
+    `../README.md`,
   ])
     .pipe(gulp.dest(`${distFolder}`));
 };
