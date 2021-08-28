@@ -1,15 +1,16 @@
 const gulp = require(`gulp`);
 const mocha = require(`gulp-mocha`);
-const LinfraCore = require(`@linfra/core`);
+const { GulpHelper } = require(`./gulp.helper`);
 
 const GulpBuild = require(`./build.gulp`);
 
-module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
+module.exports = GulpHelper.combineGulpFiles(
   GulpBuild,
 );
 exports = module.exports;
 
 const distFolder = `../dist`;
+const srcFolder = `../src`;
 const specFolder = `../spec`;
 
 /**
@@ -26,17 +27,11 @@ exports[`test:start`] = function test () {
 
 exports[`test:watch`] = gulp.series(
   exports[`build:test`],
+  exports[`build:pkg`],
   exports[`test:start`],
-  gulp.parallel(
-    function testBuildWatch () {
-      return gulp.watch([
-        `${specFolder}/**/*.ts`,
-      ], gulp.series(exports[`build:test`]));
-    },
-    function testStartWatch () {
-      return gulp.watch([
-        `${distFolder}/**/*.js`,
-      ], gulp.series(exports[`test:start`]));
-    },
-  ),
+  function buildSpecWatch () {
+    gulp.watch([ `${specFolder}/**/*.ts` ], gulp.series(exports[`build:test`]));
+    gulp.watch([ `${srcFolder}/**/*.ts` ], gulp.series(exports[`build:pkg`]));
+    gulp.watch([ `${distFolder}/**/*.js` ], gulp.series(exports[`test:start`]));
+  },
 );

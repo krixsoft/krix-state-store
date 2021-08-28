@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": ".",
+    "baseUrl": "src",
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "removeComments": true,
-    "target": "es6",
+    "removeComments": false,
+    "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -24,11 +24,6 @@
   ],
   "include": [
     "src/**/*.ts",
-    "spec/**/*.ts",
-    "typings/**/*.ts",
-    // etc
-    
-    // if you are going to parse JS files
-    "src/**/*/.js"
+    "src/**/*.js"
   ]
 }

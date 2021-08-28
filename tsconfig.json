@@ -3,7 +3,7 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
-    "baseUrl": "src",
+    "rootDir": ".",
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
@@ -23,7 +23,12 @@
     "dist"
   ],
   "include": [
-    "**/*.ts",
-    "**/*.js"
+    "src/**/*.ts",
+    "spec/**/*.ts",
+    "typings/**/*.ts",
+    // etc
+    
+    // if you are going to parse JS files
+    "src/**/*/.js"
   ]
 }

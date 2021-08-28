@@ -1,10 +1,10 @@
 const gulp = require(`gulp`);
 const replace = require('gulp-replace');
-const LinfraCore = require(`@linfra/core`);
+const { GulpHelper } = require(`./gulp.helper`);
 
 const GulpCommon = require(`./common.gulp`);
 
-module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
+module.exports = GulpHelper.combineGulpFiles(
   GulpCommon,
 );
 exports = module.exports;
@@ -20,6 +20,7 @@ exports[`pkg:update-main`] = function pkgUpdateMainInPackageJSON () {
     `../package.json`,
   ])
     .pipe(replace(/\.\/dist\/index\.js/g, './index.js'))
+    .pipe(replace(/\.\/dist\/index\.d\.ts/g, './index.d.ts'))
     .pipe(gulp.dest(`${distFolder}`));
 };
 

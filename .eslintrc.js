@@ -28,10 +28,25 @@ module.exports =  {
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/promise-function-async': 'warn',
-    '@typescript-eslint/type-annotation-spacing': [ 'warn', {
-      'before': false,
-      'after': true,
-    }],
+    '@typescript-eslint/explicit-module-boundary-types': [
+      'warn',
+      {
+        allowArgumentsExplicitlyTypedAsAny: true,
+      },
+    ],
+    '@typescript-eslint/type-annotation-spacing': [
+      'warn',
+      {
+        'before': true,
+        'after': true,
+        'overrides': {
+          'colon': {
+            'before': false,
+            'after': true,
+          },
+        },
+      },
+    ],
     '@typescript-eslint/await-thenable': 'warn',
     'require-await': 'off',
     '@typescript-eslint/require-await': 'off',
@@ -85,7 +100,7 @@ module.exports =  {
     '@typescript-eslint/no-shadow': [ 'warn' ],
     'no-throw-literal': 'warn',
     'no-fallthrough': 'warn',
-    'no-unused-expressions': 'warn',
+    '@typescript-eslint/no-unused-expressions': 'warn',
     'no-var': 'warn',
     'radix': 'warn',
     'eqeqeq': [ 'warn', 'always' ],

@@ -1,10 +1,10 @@
 const gulp = require(`gulp`);
-const LinfraCore = require(`@linfra/core`);
+const { GulpHelper } = require(`./gulp.helper`);
 
 const GulpCommon = require(`./common.gulp`);
 const GulpBuild = require(`./build.gulp`);
 
-module.exports = LinfraCore.Helpers.GulpHelper.combineGulpFiles(
+module.exports = GulpHelper.combineGulpFiles(
   GulpCommon,
   GulpBuild,
 );
