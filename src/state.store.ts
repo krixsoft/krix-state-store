@@ -1,5 +1,4 @@
 import * as Rx from 'rxjs';
-import * as RxOp from 'rxjs/operators';
 import { Interfaces, Enums } from './shared';
 
 import { KrixHelper } from './krix.helper';
@@ -73,7 +72,7 @@ export class StateStore<StoreType = any> {
     // Create an observable which extracts a state value from the `State Change` flow
     const obsStateChanges = sjStateChanges
       .pipe(
-        RxOp.map((stateChange: Interfaces.StateChange) => {
+        Rx.map((stateChange: Interfaces.StateChange) => {
           return stateChange.newValue;
         }),
       );

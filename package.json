@@ -1,6 +1,6 @@
 {
   "name": "@krix/state-store",
-  "version": "6.0.1",
+  "version": "6.1.0",
   "description": "Krix State Store",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -79,6 +79,6 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "rxjs": "^6.6.3"
+    "rxjs": "^7.8.1"
   }
 }
